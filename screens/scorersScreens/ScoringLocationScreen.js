@@ -75,8 +75,8 @@ class ScoringLocationScreen extends React.Component {
           description: { fontSize: 16 }
         }}
         nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-        filterReverseGeocodingByTypes={['street_address', 'locality', 'administrative_area_level_3']}
-        currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+        filterReverseGeocodingByTypes={["locality", "administrative_area_level_3"]}
+        currentLocation={true} // Will add a "Current location" button at the top of the predefined places list
         currentLocationLabel="Current location"
         debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
       />
