@@ -24,9 +24,13 @@ class ScorerGameListScreen extends React.PureComponent {
       }
     });
 
-    this.navListeners = [
-      this.props.navigation.addListener("willFocus", this.componentWillFocus),
-    ];
+    this.navListeners = [this.props.navigation.addListener("willFocus", this.componentWillFocus)];
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.gameDeleteSucceeded && nextProps.gameDeleteSucceeded) {
+      this.props.fetchUserGames();
+    }
   }
 
   componentWillFocus = () => {
@@ -119,6 +123,7 @@ class ScorerGameListScreen extends React.PureComponent {
 
 const mapStateToProps = state => {
   const { userGamesFetchStart } = state.userGames;
+  const { gameDeleteSucceeded } = state.deleteGame;
 
   const userGames = _.sortBy(
     _.map(state.userGames.data, (val, uid) => {
@@ -129,7 +134,7 @@ const mapStateToProps = state => {
     }
   ).reverse();
 
-  return { userGames, userGamesFetchStart };
+  return { userGames, userGamesFetchStart, gameDeleteSucceeded };
 };
 
 export default connect(
