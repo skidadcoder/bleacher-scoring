@@ -17,8 +17,8 @@ import {
   View
 } from "react-native";
 import { Constants, FileSystem, Permissions } from "expo";
+import { withNavigation } from "react-navigation";
 import { Ionicons } from "@expo/vector-icons";
-import Lightbox from "react-native-lightbox";
 import { human, iOSColors } from "react-native-typography";
 import Image from "react-native-scalable-image";
 import Colors from "../../constants/Colors";
@@ -31,7 +31,7 @@ const initialState = {
   selectedImageUrl: null
 };
 
-export default class GamePostListItem extends React.PureComponent {
+class GamePostListItem extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -137,7 +137,7 @@ export default class GamePostListItem extends React.PureComponent {
       return (
         <TouchableWithoutFeedback
           delayLongPress={500}
-          onPress={() => console.log("Open up carosel of images.")}
+          onPress={() => this.props.navigation.navigate("ImageGallery", { imageUrl })}
           onLongPress={() => {
             this.setState({ selectedImageUrl: imageUrl, picModalOuterVisible: true });
           }}
@@ -430,3 +430,5 @@ const styles = StyleSheet.create({
     color: Colors.primaryLightColor
   }
 });
+
+export default withNavigation(GamePostListItem);

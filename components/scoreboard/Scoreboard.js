@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { AdMobInterstitial } from "expo";
+import { AdMobInterstitial, Constants } from "expo";
 import { connect } from "react-redux";
 import { withNavigation } from "react-navigation";
 import {
@@ -43,6 +43,7 @@ import GamePostListItem from "../../components/scoreboard/GamePostListItem";
 import GamePostInput from "../../components/scoreboard/GamePostInput";
 import Colors from "../../constants/Colors";
 import GlobalStyles from "../../screens/styles";
+import storeUrl from "../../utils/storeUrl";
 
 const HEADER_MAX_HEIGHT = 260;
 const HEADER_MIN_HEIGHT = 0; //Platform.OS === "ios" ? 60 : 73;
