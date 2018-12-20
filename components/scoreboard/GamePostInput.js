@@ -97,7 +97,11 @@ class GamePostInput extends React.Component {
   };
 
   onCancelPostPress = () => {
-    this.setState({ body: null });
+    if (!this.state.isChoosingPicture) {
+      Keyboard.dismiss();
+      this.setState(initialState);
+      this.props.cancel();
+    }
   };
 
   onChangeText = text => {
