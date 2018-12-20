@@ -13,13 +13,13 @@ export default class SetScores extends React.Component {
   }
 
   render() {
-    const { game, isReversed } = this.props;
+    const { game, reversed } = this.props;
     const { currentSet } = game;
     const _currentSet = currentSet === "Final" ? 6 : currentSet;
 
     return game.sets.map(function(set, i) {
-      const leftScore = isReversed ? set.awayTeamScore : set.homeTeamScore;
-      const rightScore = !isReversed ? set.awayTeamScore : set.homeTeamScore;
+      const leftScore = reversed ? set.awayTeamScore : set.homeTeamScore;
+      const rightScore = !reversed ? set.awayTeamScore : set.homeTeamScore;
       const borderColor =
         i === _currentSet ? iOSColors.white : Colors.primaryLightColor;
       const backgroundColor =
