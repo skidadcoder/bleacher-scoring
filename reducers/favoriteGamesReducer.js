@@ -10,11 +10,7 @@ export default (state = INITIAL_STATE, action) => {
     case FAVORITE_GAMES_FETCH_START:
       return { ...state, data: {}, favoriteGamesFetchStarted: true };
     case FAVORITE_GAME_FETCH_SUCCESS:
-    console.log("FAVORITE_GAME_FETCH_SUCCESS");
       return { ...state, data: { ...state.data, ...action.payload }, favoriteGamesFetchStarted: false };
-    case FAVORITE_GAMES_FETCH_SUCCESS:
-      console.log("FAVORITE_GAMES_FETCH_SUCCESS");
-      return { ...state, favoriteGamesFetchStarted: false };
     default:
       return state;
   }

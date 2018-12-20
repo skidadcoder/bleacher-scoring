@@ -394,13 +394,18 @@ export const fetchFavoriteGames = gameUids => {
     } else {
       Promise.all(
         gameUids.map(gameUid => {
+          console.log(gameUid);
           return db
             .orderByKey()
             .equalTo(gameUid)
             .on(
               "value",
               snapshot => {
-                dispatch({ type: FAVORITE_GAME_FETCH_SUCCESS, payload: snapshot.val() });
+                if (!snapshot.val()) {
+                  dispatch({ type: REMOVE_SAVED_GAME, payload: gameUid }); //remove from favorites if game is deleted
+                } else {
+                  dispatch({ type: FAVORITE_GAME_FETCH_SUCCESS, payload: snapshot.val() });
+                }
               },
               error => {
                 console.error(error);
