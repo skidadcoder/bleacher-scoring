@@ -52,8 +52,7 @@ export default class SetScores extends React.Component {
                 borderColor: borderColor,
                 borderWidth: 2,
                 borderRadius: 5,
-                padding: 5,
-                width: 65
+                padding: 5
               }
             ]}
           >
