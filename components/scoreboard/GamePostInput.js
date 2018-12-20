@@ -14,11 +14,7 @@ import { Icon, ImageManipulator, ImagePicker, Permissions } from "expo";
 import { human, iOSColors } from "react-native-typography";
 import Colors from "../../constants/Colors";
 
-import {
-  createGamePost,
-  deleteGamePost,
-  updateGamePost
-} from "../../actions/gameActions";
+import { createGamePost, deleteGamePost, updateGamePost } from "../../actions/gameActions";
 
 const initialState = {
   isPosting: false,
@@ -59,10 +55,7 @@ class GamePostInput extends React.Component {
       this.resetInput();
     }
 
-    if (
-      nextProps.selectedPost &&
-      nextProps.selectedPost.postUid !== this.state.postUid
-    ) {
+    if (nextProps.selectedPost && nextProps.selectedPost.postUid !== this.state.postUid) {
       const { postUid, body, imageUri } = nextProps.selectedPost;
       this.setState(
         {
@@ -93,7 +86,7 @@ class GamePostInput extends React.Component {
       xhr.send();
     });
   };
-  
+
   resetInput = () => {
     this.setState(initialState, () => {
       setTimeout(() => {
@@ -128,16 +121,17 @@ class GamePostInput extends React.Component {
       });
 
       if (!result.cancelled) {
-        const blob = await this.urlToBlob(result.uri);
-        
-        this.setState(
-          { isChoosingPicture: false, image: blob, imageUri: result.uri },
-          () => {
-            setTimeout(() => {
-              this.postInput.focus();
-            }, 100);
-          }
-        );
+        const manipResult = await ImageManipulator.manipulateAsync(result.uri, [{ resize: { width: 500 } }], {
+          compress: 0.5
+        });
+
+        const blob = await this.urlToBlob(manipResult.uri);
+
+        this.setState({ isChoosingPicture: false, image: blob, imageUri: result.uri }, () => {
+          setTimeout(() => {
+            this.postInput.focus();
+          }, 100);
+        });
       } else {
         this.setState(
           {
@@ -153,9 +147,7 @@ class GamePostInput extends React.Component {
         );
       }
     } else {
-      alert(
-        "You have not granted this app permissions to access your camera roll."
-      );
+      alert("You have not granted this app permissions to access your camera roll.");
     }
   };
 
@@ -217,11 +209,7 @@ class GamePostInput extends React.Component {
           }}
         >
           <Icon.Ionicons
-            color={
-              image || (body && body.length > 0)
-                ? Colors.secondaryColor
-                : iOSColors.gray
-            }
+            color={image || (body && body.length > 0) ? Colors.secondaryColor : iOSColors.gray}
             name="md-send"
             size={30}
             style={{ alignSelf: "center" }}
@@ -242,12 +230,7 @@ class GamePostInput extends React.Component {
         }}
         onPress={this.onPickImagePress}
       >
-        <Icon.MaterialIcons
-          style={{ alignSelf: "center" }}
-          color={Colors.secondaryColor}
-          name="photo"
-          size={40}
-        />
+        <Icon.MaterialIcons style={{ alignSelf: "center" }} color={Colors.secondaryColor} name="photo" size={40} />
       </TouchableOpacity>
     );
   };
@@ -263,9 +246,7 @@ class GamePostInput extends React.Component {
           backgroundColor: iOSColors.lightGray
         }}
       >
-        <View style={{ justifyContent: "flex-end" }}>
-          {this.renderCameraButton()}
-        </View>
+        <View style={{ justifyContent: "flex-end" }}>{this.renderCameraButton()}</View>
 
         <View
           style={{
@@ -288,10 +269,7 @@ class GamePostInput extends React.Component {
                 margin: 5
               }}
             >
-              <ImageBackground
-                source={{ uri: imageUri }}
-                style={{ height: 100, width: 100 }}
-              >
+              <ImageBackground source={{ uri: imageUri }} style={{ height: 100, width: 100 }}>
                 <TouchableOpacity onPress={this.onDeleteImagePress}>
                   <View
                     style={{
@@ -348,10 +326,7 @@ class GamePostInput extends React.Component {
               maxLength={255}
             />
 
-            <TouchableOpacity
-              style={{ alignSelf: "center" }}
-              onPress={this.onCancelPostPress}
-            >
+            <TouchableOpacity style={{ alignSelf: "center" }} onPress={this.onCancelPostPress}>
               <Icon.Ionicons
                 color={iOSColors.gray}
                 name="md-close"
@@ -365,9 +340,7 @@ class GamePostInput extends React.Component {
           </View>
         </View>
 
-        <View style={{ justifyContent: "flex-end" }}>
-          {this.renderPostButton()}
-        </View>
+        <View style={{ justifyContent: "flex-end" }}>{this.renderPostButton()}</View>
       </View>
     );
   };
@@ -389,11 +362,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { gameUid } = state.selectedGame;
-  const {
-    gamePostPersistStarted,
-    gamePostPersistSucceeded,
-    gamePostPersistFailed
-  } = state.gamePost;
+  const { gamePostPersistStarted, gamePostPersistSucceeded, gamePostPersistFailed } = state.gamePost;
 
   return {
     gameUid,

@@ -6,6 +6,7 @@ import {
   Animated,
   Dimensions,
   FlatList,
+  LayoutAnimation,
   Modal,
   Platform,
   SafeAreaView,
@@ -65,8 +66,8 @@ class Scoreboard extends React.PureComponent {
   async componentDidMount() {
     Dimensions.addEventListener("change", this.onDimensionChange);
 
-    AdMobInterstitial.setAdUnitID("ca-app-pub-3940256099942544/1033173712"); // Test ID, Replace with your-admob-unit-id
-    AdMobInterstitial.setTestDeviceID("EMULATOR");
+    // AdMobInterstitial.setAdUnitID("ca-app-pub-3940256099942544/1033173712"); // Test ID, Replace with your-admob-unit-id
+    // AdMobInterstitial.setTestDeviceID("EMULATOR");
     // AdMobInterstitial.addEventListener("interstitialDidLoad", () => console.log("interstitialDidLoad"));
     // AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => console.log("interstitialDidFailToLoad"));
     // AdMobInterstitial.addEventListener("interstitialDidOpen", () => console.log("interstitialDidOpen"));
@@ -75,8 +76,8 @@ class Scoreboard extends React.PureComponent {
     //   console.log("interstitialWillLeaveApplication")
     // );
 
-    await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
-    await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
+    // await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
+    // await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
 
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     this.props.fetchGameById({ gameUid });
@@ -178,13 +179,28 @@ class Scoreboard extends React.PureComponent {
 
   onShareGamePress = async () => {
     const { gameUid } = this.props;
+    const appName = Constants.manifest.name;
+    const title = `${appName}`;
+    const message = `Watch this game on ${appName}. ${storeUrl() || ''}`;
 
     await Share.share(
       {
-        message: "Here is your Bleacher Scoring link.",
+        title,
+        message,
         url: Expo.Linking.makeUrl("", { game: gameUid })
       },
       {
+        tintColor: Constants.manifest.tintColor,
+        excludedActivityTypes: [
+          'com.apple.UIKit.activity.Print',
+          'com.apple.UIKit.activity.AssignToContact',
+          'com.apple.UIKit.activity.AddToReadingList',
+          'com.apple.UIKit.activity.OpenInIBooks',
+          'com.apple.UIKit.activity.MarkupAsPDF',
+          'com.apple.reminders.RemindersEditorExtension', // Reminders
+          'com.apple.mobilenotes.SharingExtension', // Notes
+          'com.apple.mobileslideshow.StreamShareService', // iCloud Photo Sharing - This also does nothing :{
+        ],
         // Android only:
         //dialogTitle: "Share BAM goodness"
         // iOS only:
@@ -640,6 +656,7 @@ class Scoreboard extends React.PureComponent {
       };
     }
 
+    LayoutAnimation.linear();
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
         <HeaderBar {...headerSettings} />
