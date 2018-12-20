@@ -25,7 +25,8 @@ import Colors from "../../constants/Colors";
 import storeUrl from "../../utils/storeUrl";
 
 const initialState = {
-  modalVisible: false,
+  postModalVisible: false,
+  postModalOuterVisible: false,  
   picModalVisible: false,
   picModalOuterVisible: false,
   selectedImageUrl: null
@@ -40,7 +41,7 @@ class GamePostListItem extends React.PureComponent {
 
   runFunctionAndClose = func => {
     func();
-    this.setModalVisible(false);
+    this.setState({ postModalVisible: false });
   };
 
   setModalVisible(visible) {
@@ -178,41 +179,87 @@ class GamePostListItem extends React.PureComponent {
 
   renderModal(onDeletePost, onEditPost) {
     return (
-      <Modal animationType="fade" transparent={true} visible={this.state.modalVisible}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "rgba(52, 52, 52, 0.8)",
-            justifyContent: "center"
-          }}
-        >
-          <View style={{ backgroundColor: "#fff", margin: 40, borderRadius: 10 }}>
-            <View
-              style={{
-                borderBottomColor: iOSColors.lightGray,
-                borderBottomWidth: 1,
-                padding: 10
-              }}
-            >
-              <Button title={"DELETE POST"} onPress={() => this.runFunctionAndClose(onDeletePost)} />
-            </View>
+      <Modal
+        transparent={true}
+        visible={this.state.postModalOuterVisible}
+        onShow={() => this.setState({ postModalVisible: true })}
+      >
+        <View style={styles.bottomSheetContainer}>
+          <Modal
+            animationType="slide"
+            onDismiss={() => this.setState({ postModalOuterVisible: false })}
+            transparent={true}
+            visible={this.state.postModalVisible}
+          >
+            <TouchableWithoutFeedback onPress={() => this.setState({ postModalVisible: false })}>
+              <View style={{ flex: 1 }} />
+            </TouchableWithoutFeedback>
+            <View style={styles.bottomSheet}>
+              <TouchableOpacity onPress={() => this.runFunctionAndClose(onDeletePost)}>
+                <View style={styles.bottomSheetButton}>
+                  <View style={styles.bottomSheetIconContainer}>
+                    <Ionicons
+                      name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+                      size={26}
+                      style={styles.bottomSheetButtonIcon}
+                    />
+                  </View>
+                  <Text style={styles.bottomSheetButtonText}>Delete post</Text>
+                </View>
+              </TouchableOpacity>
 
-            <View
-              style={{
-                borderBottomColor: iOSColors.lightGray,
-                borderBottomWidth: 1,
-                padding: 10
-              }}
-            >
-              <Button title={"EDIT POST"} onPress={() => this.runFunctionAndClose(onEditPost)} />
-            </View>
+              <TouchableOpacity onPress={() => this.runFunctionAndClose(onEditPost)}>
+                <View style={styles.bottomSheetButton}>
+                  <View style={styles.bottomSheetIconContainer}>
+                    <Ionicons
+                      name={Platform.OS === "ios" ? "ios-create" : "md-create"}
+                      size={26}
+                      style={styles.bottomSheetButtonIcon}
+                    />
+                  </View>
+                  <Text style={styles.bottomSheetButtonText}>Edit post</Text>
+                </View>
+              </TouchableOpacity>
 
-            <View style={{ padding: 10 }}>
-              <Button title={"CANCEL"} onPress={() => this.setModalVisible(false)} />
             </View>
-          </View>
+          </Modal>
         </View>
       </Modal>
+      // <Modal animationType="fade" transparent={true} visible={this.state.modalVisible}>
+      //   <View
+      //     style={{
+      //       flex: 1,
+      //       backgroundColor: "rgba(52, 52, 52, 0.8)",
+      //       justifyContent: "center"
+      //     }}
+      //   >
+      //     <View style={{ backgroundColor: "#fff", margin: 40, borderRadius: 10 }}>
+      //       <View
+      //         style={{
+      //           borderBottomColor: iOSColors.lightGray,
+      //           borderBottomWidth: 1,
+      //           padding: 10
+      //         }}
+      //       >
+      //         <Button title={"DELETE POST"} onPress={() => this.runFunctionAndClose(onDeletePost)} />
+      //       </View>
+
+      //       <View
+      //         style={{
+      //           borderBottomColor: iOSColors.lightGray,
+      //           borderBottomWidth: 1,
+      //           padding: 10
+      //         }}
+      //       >
+      //         <Button title={"EDIT POST"} onPress={() => this.runFunctionAndClose(onEditPost)} />
+      //       </View>
+
+      //       <View style={{ padding: 10 }}>
+      //         <Button title={"CANCEL"} onPress={() => this.setModalVisible(false)} />
+      //       </View>
+      //     </View>
+      //   </View>
+      // </Modal>
     );
   }
 
@@ -309,7 +356,7 @@ class GamePostListItem extends React.PureComponent {
               <TouchableOpacity
                 style={{ height: 44, width: 44, alignSelf: "flex-end" }}
                 onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
+                  this.setState({ postModalOuterVisible: true });
                 }}
               >
                 <Ionicons
