@@ -391,7 +391,9 @@ class Scoreboard extends React.PureComponent {
     const { orderedPosts } = this.props;
     const { currentUser } = firebase.auth();
 
-    return (
+    LayoutAnimation.linear();
+    
+    return (    
       <FlatList
         contentContainerStyle={[
           { flexGrow: 1, backgroundColor: iOSColors.lightGray },
@@ -657,7 +659,6 @@ class Scoreboard extends React.PureComponent {
       };
     }
 
-    LayoutAnimation.linear();
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
         <HeaderBar {...headerSettings} />

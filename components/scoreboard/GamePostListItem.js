@@ -26,9 +26,7 @@ import storeUrl from "../../utils/storeUrl";
 
 const initialState = {
   postModalVisible: false,
-  postModalOuterVisible: false,  
   picModalVisible: false,
-  picModalOuterVisible: false,
   selectedImageUrl: null
 };
 
@@ -43,10 +41,6 @@ class GamePostListItem extends React.PureComponent {
     func();
     this.setState({ postModalVisible: false });
   };
-
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
 
   saveImage = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -140,7 +134,7 @@ class GamePostListItem extends React.PureComponent {
           delayLongPress={500}
           onPress={() => this.props.navigation.navigate("ImageGallery", { imageUrl })}
           onLongPress={() => {
-            this.setState({ selectedImageUrl: imageUrl, picModalOuterVisible: true });
+            this.setState({ selectedImageUrl: imageUrl, picModalVisible: true });
           }}
         >
           <Image source={{ uri: imageUrl }} width={Dimensions.get("window").width} />
@@ -177,150 +171,88 @@ class GamePostListItem extends React.PureComponent {
     }
   };
 
-  renderModal(onDeletePost, onEditPost) {
+  renderPostModal(onDeletePost, onEditPost) {
     return (
-      <Modal
-        transparent={true}
-        visible={this.state.postModalOuterVisible}
-        onShow={() => this.setState({ postModalVisible: true })}
-      >
-        <View style={styles.bottomSheetContainer}>
-          <Modal
-            animationType="slide"
-            onDismiss={() => this.setState({ postModalOuterVisible: false })}
-            transparent={true}
-            visible={this.state.postModalVisible}
-          >
-            <TouchableWithoutFeedback onPress={() => this.setState({ postModalVisible: false })}>
-              <View style={{ flex: 1 }} />
-            </TouchableWithoutFeedback>
-            <View style={styles.bottomSheet}>
-              <TouchableOpacity onPress={() => this.runFunctionAndClose(onDeletePost)}>
-                <View style={styles.bottomSheetButton}>
-                  <View style={styles.bottomSheetIconContainer}>
-                    <Ionicons
-                      name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
-                      size={26}
-                      style={styles.bottomSheetButtonIcon}
-                    />
-                  </View>
-                  <Text style={styles.bottomSheetButtonText}>Delete post</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => this.runFunctionAndClose(onEditPost)}>
-                <View style={styles.bottomSheetButton}>
-                  <View style={styles.bottomSheetIconContainer}>
-                    <Ionicons
-                      name={Platform.OS === "ios" ? "ios-create" : "md-create"}
-                      size={26}
-                      style={styles.bottomSheetButtonIcon}
-                    />
-                  </View>
-                  <Text style={styles.bottomSheetButtonText}>Edit post</Text>
-                </View>
-              </TouchableOpacity>
-
+      <Modal animationType="slide" transparent={true} visible={this.state.postModalVisible}>
+        <TouchableWithoutFeedback onPress={() => this.setState({ postModalVisible: false })}>
+          <View style={styles.bottomSheetContainer} />
+        </TouchableWithoutFeedback>
+        <View style={styles.bottomSheet}>
+          <TouchableOpacity onPress={() => this.runFunctionAndClose(onDeletePost)}>
+            <View style={styles.bottomSheetButton}>
+              <View style={styles.bottomSheetIconContainer}>
+                <Ionicons
+                  name={Platform.OS === "ios" ? "ios-trash" : "md-trash"}
+                  size={26}
+                  style={styles.bottomSheetButtonIcon}
+                />
+              </View>
+              <Text style={styles.bottomSheetButtonText}>Delete post</Text>
             </View>
-          </Modal>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.runFunctionAndClose(onEditPost)}>
+            <View style={styles.bottomSheetButton}>
+              <View style={styles.bottomSheetIconContainer}>
+                <Ionicons
+                  name={Platform.OS === "ios" ? "ios-create" : "md-create"}
+                  size={26}
+                  style={styles.bottomSheetButtonIcon}
+                />
+              </View>
+              <Text style={styles.bottomSheetButtonText}>Edit post</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </Modal>
-      // <Modal animationType="fade" transparent={true} visible={this.state.modalVisible}>
-      //   <View
-      //     style={{
-      //       flex: 1,
-      //       backgroundColor: "rgba(52, 52, 52, 0.8)",
-      //       justifyContent: "center"
-      //     }}
-      //   >
-      //     <View style={{ backgroundColor: "#fff", margin: 40, borderRadius: 10 }}>
-      //       <View
-      //         style={{
-      //           borderBottomColor: iOSColors.lightGray,
-      //           borderBottomWidth: 1,
-      //           padding: 10
-      //         }}
-      //       >
-      //         <Button title={"DELETE POST"} onPress={() => this.runFunctionAndClose(onDeletePost)} />
-      //       </View>
-
-      //       <View
-      //         style={{
-      //           borderBottomColor: iOSColors.lightGray,
-      //           borderBottomWidth: 1,
-      //           padding: 10
-      //         }}
-      //       >
-      //         <Button title={"EDIT POST"} onPress={() => this.runFunctionAndClose(onEditPost)} />
-      //       </View>
-
-      //       <View style={{ padding: 10 }}>
-      //         <Button title={"CANCEL"} onPress={() => this.setModalVisible(false)} />
-      //       </View>
-      //     </View>
-      //   </View>
-      // </Modal>
     );
   }
 
   renderPicModal = () => {
     return (
-      <Modal
-        transparent={true}
-        visible={this.state.picModalOuterVisible}
-        onShow={() => this.setState({ picModalVisible: true })}
-      >
-        <View style={styles.bottomSheetContainer}>
-          <Modal
-            animationType="slide"
-            onDismiss={() => this.setState({ picModalOuterVisible: false })}
-            transparent={true}
-            visible={this.state.picModalVisible}
-          >
-            <TouchableWithoutFeedback onPress={() => this.setState({ picModalVisible: false })}>
-              <View style={{ flex: 1 }} />
-            </TouchableWithoutFeedback>
-            <View style={styles.bottomSheet}>
-              <TouchableOpacity onPress={this.saveImage}>
-                <View style={styles.bottomSheetButton}>
-                  <View style={styles.bottomSheetIconContainer}>
-                    <Ionicons
-                      name={Platform.OS === "ios" ? "ios-save" : "md-save"}
-                      size={26}
-                      style={styles.bottomSheetButtonIcon}
-                    />
-                  </View>
-                  <Text style={styles.bottomSheetButtonText}>Save image</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={this.shareImage}>
-                <View style={styles.bottomSheetButton}>
-                  <View style={styles.bottomSheetIconContainer}>
-                    <Ionicons
-                      name={Platform.OS === "ios" ? "ios-share" : "md-share"}
-                      size={26}
-                      style={styles.bottomSheetButtonIcon}
-                    />
-                  </View>
-                  <Text style={styles.bottomSheetButtonText}>Share</Text>
-                </View>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={this.sendImageUrlToClipboard}>
-                <View style={styles.bottomSheetButton}>
-                  <View style={styles.bottomSheetIconContainer}>
-                    <Ionicons
-                      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-                      size={26}
-                      style={styles.bottomSheetButtonIcon}
-                    />
-                  </View>
-                  <Text style={styles.bottomSheetButtonText}>Copy image link</Text>
-                </View>
-              </TouchableOpacity>
+      <Modal animationType="slide" transparent={true} visible={this.state.picModalVisible}>
+        <TouchableWithoutFeedback onPress={() => this.setState({ picModalVisible: false })}>
+          <View style={styles.bottomSheetContainer} />
+        </TouchableWithoutFeedback>
+        <View style={styles.bottomSheet}>
+          <TouchableOpacity onPress={this.saveImage}>
+            <View style={styles.bottomSheetButton}>
+              <View style={styles.bottomSheetIconContainer}>
+                <Ionicons
+                  name={Platform.OS === "ios" ? "ios-save" : "md-save"}
+                  size={26}
+                  style={styles.bottomSheetButtonIcon}
+                />
+              </View>
+              <Text style={styles.bottomSheetButtonText}>Save image</Text>
             </View>
-          </Modal>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={this.shareImage}>
+            <View style={styles.bottomSheetButton}>
+              <View style={styles.bottomSheetIconContainer}>
+                <Ionicons
+                  name={Platform.OS === "ios" ? "ios-share" : "md-share"}
+                  size={26}
+                  style={styles.bottomSheetButtonIcon}
+                />
+              </View>
+              <Text style={styles.bottomSheetButtonText}>Share</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={this.sendImageUrlToClipboard}>
+            <View style={styles.bottomSheetButton}>
+              <View style={styles.bottomSheetIconContainer}>
+                <Ionicons
+                  name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+                  size={26}
+                  style={styles.bottomSheetButtonIcon}
+                />
+              </View>
+              <Text style={styles.bottomSheetButtonText}>Copy image link</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </Modal>
     );
@@ -356,7 +288,7 @@ class GamePostListItem extends React.PureComponent {
               <TouchableOpacity
                 style={{ height: 44, width: 44, alignSelf: "flex-end" }}
                 onPress={() => {
-                  this.setState({ postModalOuterVisible: true });
+                  this.setState({ postModalVisible: true });
                 }}
               >
                 <Ionicons
@@ -371,7 +303,7 @@ class GamePostListItem extends React.PureComponent {
         </View>
         {this.renderText(post.body)}
         {this.renderImage(post.imageUri)}
-        {this.renderModal(onDeletePost, onEditPost)}
+        {this.renderPostModal(onDeletePost, onEditPost)}
         {this.renderPicModal()}
       </View>
     );
@@ -452,6 +384,7 @@ const styles = StyleSheet.create({
   },
   bottomSheetContainer: {
     flex: 1,
+
     backgroundColor: "rgba(52, 52, 52, 0.5)"
   },
   bottomSheet: {

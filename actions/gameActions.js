@@ -213,6 +213,7 @@ _persistGamePost = ({ gameUid, postUid, body, imageUri, image }) => {
       .ref()
       .update(postRef)
       .then(() => {
+        //new image
         if (image) {
           return storageRef
             .put(image)
@@ -228,11 +229,20 @@ _persistGamePost = ({ gameUid, postUid, body, imageUri, image }) => {
                 .update(postUpdateWithImageRef);
             });
         } else {
-          if (imageUri.length === 0) {
-            return storageRef.delete();
-          } else {
-            return new Promise(null);
-          }
+          //existing image to be left alone or deleted
+          storageRef.getDownloadURL().then(
+            () => {
+              if (!imageUri) {
+                return storageRef.delete();
+              } else {
+                return Promise.resolve();
+              }
+            },
+            error => {
+              //no image exists for post ref so just move on
+              return Promise.resolve();
+            }
+          );         
         }
       })
       .then(() => dispatch({ type: GAME_POST_PERSIST_SUCCESS }))

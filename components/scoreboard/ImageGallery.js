@@ -25,7 +25,6 @@ import GlobalStyles from "../../screens/styles";
 
 const initialState = {
   picModalVisible: false,
-  picModalOuterVisible: false,
   selectedImageIndex: 0,
   selectedImageUrl: null
 };
@@ -109,7 +108,7 @@ class ImageGallery extends React.Component {
   };
 
   onLongPress = () => {
-    this.setState({ picModalOuterVisible: true });
+    this.setState({ picModalVisible: true });
   };
 
   onPageSelected = index => {
@@ -119,20 +118,13 @@ class ImageGallery extends React.Component {
 
   renderPicModal = () => {
     return (
-      <Modal
-        transparent={true}
-        visible={this.state.picModalOuterVisible}
-        onShow={() => this.setState({ picModalVisible: true })}
-      >
-        <View style={styles.bottomSheetContainer}>
           <Modal
             animationType="slide"
-            onDismiss={() => this.setState({ picModalOuterVisible: false })}
             transparent={true}
             visible={this.state.picModalVisible}
           >
             <TouchableWithoutFeedback onPress={() => this.setState({ picModalVisible: false })}>
-              <View style={{ flex: 1 }} />
+              <View style={styles.bottomSheetContainer} />
             </TouchableWithoutFeedback>
             <View style={styles.bottomSheet}>
               <TouchableOpacity onPress={this.saveImage}>
@@ -175,8 +167,7 @@ class ImageGallery extends React.Component {
               </TouchableOpacity>
             </View>
           </Modal>
-        </View>
-      </Modal>
+     
     );
   };
 

@@ -263,7 +263,7 @@ class GamePostInput extends React.Component {
             backgroundColor: "#f5f5f5"
           }}
         >
-          {imageUri && (
+          {!!imageUri && (
             <View
               style={{
                 width: 100,
