@@ -597,15 +597,13 @@ class Scoreboard extends React.PureComponent {
             }}
           >
             <View style={{ flex: 2 }}>
-              {this.renderWins("left")}
-              <AnimatedTeamName teamName={leftTeamName} />
-              <AnimatedScore score={leftScore} />
+              <Text style={[human.bodyWhite, {textAlign: "center"}]}>{leftTeamName}</Text>
+              <Text style={[human.title2White, {textAlign: "center"}]}>{leftScore}</Text>
             </View>
             <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>{this.renderSet()}</View>
             <View style={{ flex: 2 }}>
-              {this.renderWins("right")}
-              <AnimatedTeamName teamName={rightTeamName} />
-              <AnimatedScore score={rightScore} />
+              <Text style={[human.bodyWhite, {textAlign: "center"}]}>{rightTeamName}</Text>
+              <Text style={[human.title2White, {textAlign: "center"}]}>{rightScore}</Text>
             </View>
           </View>
         </Animated.View>
@@ -682,12 +680,10 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   bar: {
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.primaryLightColor,
     alignItems: "center",
     justifyContent: "center",
-    height: 100,
-    padding: 20,
-    paddingTop: 10,
+    padding: 16,
     position: "absolute",
     top: 0,
     left: 0,
