@@ -51,7 +51,7 @@ export const gamePropChange = ({ prop, value }) => {
 
 export const createGame = ({ venueName, homeTeamName, awayTeamName }) => {
   const { currentUser } = firebase.auth();
-  const { uid } = currentUser;
+  const { uid, displayName } = currentUser;
   const currentSet = 1;
   const sets = {
     "1": { homeTeamScore: "0", awayTeamScore: "0" },
@@ -76,6 +76,7 @@ export const createGame = ({ venueName, homeTeamName, awayTeamName }) => {
     const games = firebase.database().ref(`/users/${currentUser.uid}/games`);
     const newGameUid = games.push().key;
     const game = {
+      displayName,
       userId: uid,
       venueName,
       gameDate,

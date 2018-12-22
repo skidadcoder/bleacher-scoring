@@ -221,7 +221,11 @@ export default class GameList extends React.PureComponent {
                   <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginTop: 3 }]}>
                     {data.item.venueName}
                   </Text>
-                  <View style={{flexDirection: "row", alignItems: "center", marginTop: 3}}>
+                  {!!data.item.displayName && 
+                  <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginTop: 3 }]}>
+                    By: {data.item.displayName}
+                  </Text>}
+                  <View style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}>
                     <Icon.MaterialIcons name="update" size={16} color={iOSColors.gray} />
                     <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginLeft: 2 }]}>
                       {/* {moment(data.item.lastUpdate).format("ddd, M/D, h:mm a")} */}

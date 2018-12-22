@@ -51,6 +51,8 @@ class GameForm extends React.Component {
         <TextField
           ref={this.homeTeamNameRef}
           label="Home team name"
+          maxLength={30}
+          characterRestriction={30}
           baseColor={iOSColors.gray}
           errorColor={Colors.secondaryColor}
           textColor={iOSColors.lightGray}
@@ -75,6 +77,8 @@ class GameForm extends React.Component {
         <TextField
           ref={this.awayTeamNameRef}
           label="Away team name"
+          maxLength={30}
+          characterRestriction={30}
           baseColor={iOSColors.gray}
           errorColor={Colors.secondaryColor}
           textColor={iOSColors.lightGray}
@@ -99,6 +103,8 @@ class GameForm extends React.Component {
         <TextField
           ref={this.venueNameRef}
           label="Venue name"
+          maxLength={30}
+          characterRestriction={30}
           baseColor={iOSColors.gray}
           errorColor={Colors.secondaryColor}
           textColor={iOSColors.lightGray}
