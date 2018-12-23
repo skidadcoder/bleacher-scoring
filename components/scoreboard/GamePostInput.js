@@ -3,8 +3,9 @@ import {
   ActivityIndicator,
   ImageBackground,
   Keyboard,
+  LayoutAnimation,
+  Platform,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View
@@ -19,7 +20,6 @@ import { createGamePost, deleteGamePost, updateGamePost } from "../../actions/ga
 const initialState = {
   isPosting: false,
   isChoosingPicture: false,
-  postInputHeight: 30,
   postUid: null,
   body: null,
   image: null,
@@ -35,7 +35,6 @@ class GamePostInput extends React.Component {
     this.onPostInputBlur = this.onPostInputBlur.bind(this);
     this.onCancelPostPress = this.onCancelPostPress.bind(this);
     this.onDeleteImagePress = this.onDeleteImagePress.bind(this);
-    this.onContentSizeChange = this.onContentSizeChange.bind(this);
     this.onPickImagePress = this.onPickImagePress.bind(this);
     this.onPostPress = this.onPostPress.bind(this);
 
@@ -120,8 +119,8 @@ class GamePostInput extends React.Component {
     if (status === "granted") {
       let result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-        mediaTypes: "Images",
-        quality: 0
+        aspect: [4, 3],
+        mediaTypes: "Images"
       });
 
       if (!result.cancelled) {
@@ -163,13 +162,6 @@ class GamePostInput extends React.Component {
     }
   };
 
-  onContentSizeChange = e => {
-    const height = e.nativeEvent.contentSize.height + 10;
-    this.setState({
-      postInputHeight: height
-    });
-  };
-
   onPostPress = () => {
     const { gameUid } = this.props;
     const { postUid, body, imageUri, image } = this.state;
@@ -188,9 +180,9 @@ class GamePostInput extends React.Component {
   };
 
   renderPostButton = () => {
-    const { isPosting, postUid, body, image } = this.state;
+    const { isPosting, body, image } = this.state;
 
-    if (this.state.isPosting) {
+    if (isPosting) {
       return (
         <ActivityIndicator
           size="large"
@@ -202,6 +194,7 @@ class GamePostInput extends React.Component {
         />
       );
     } else if (image || (body && body.length > 0)) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
       return (
         <TouchableOpacity
           onPress={this.onPostPress}
@@ -240,7 +233,7 @@ class GamePostInput extends React.Component {
   };
 
   renderPostInput = () => {
-    const { body, imageUri, postInputHeight } = this.state;
+    const { body, imageUri } = this.state;
 
     return (
       <View
@@ -257,9 +250,7 @@ class GamePostInput extends React.Component {
             flex: 1,
             borderColor: iOSColors.gray,
             borderWidth: 1,
-            borderRadius: 20,
-            justifyContent: "center",
-            alignContent: "center",
+            borderRadius: 16,
             backgroundColor: "#f5f5f5"
           }}
         >
@@ -268,7 +259,7 @@ class GamePostInput extends React.Component {
               style={{
                 width: 100,
                 height: 100,
-                borderRadius: 20,
+                borderRadius: 16,
                 overflow: "hidden",
                 margin: 5
               }}
@@ -305,41 +296,32 @@ class GamePostInput extends React.Component {
             </View>
           )}
 
-          <View style={{ flexDirection: "row" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              minHeight: 40,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
             <TextInput
               ref={this.postInputRef}
-              style={[
-                human.body,
-                {
-                  flex: 1,
-                  height: postInputHeight,
-                  marginLeft: 12,
-                  marginRight: 12,
-                  marginBottom: 4,
-                  marginTop: 2
-                }
-              ]}
+              style={[human.body, { flex: 1, marginLeft: 8, paddingBottom: 4 }]}
               placeholder="Post a comment..."
               placeholderTextColor={iOSColors.gray}
               onChangeText={this.onChangeText}
               editable={true}
               multiline={true}
               value={body}
-              onContentSizeChange={this.onContentSizeChange}
               onBlur={this.onPostInputBlur}
               maxLength={255}
             />
 
-            <TouchableOpacity style={{ alignSelf: "center" }} onPress={this.onCancelPostPress}>
-              <Icon.Ionicons
-                color={iOSColors.gray}
-                name="md-close"
-                size={26}
-                style={{
-                  alignSelf: "center",
-                  marginRight: 10
-                }}
-              />
+            <TouchableOpacity
+              onPress={this.onCancelPostPress}
+              style={{ height: 44, width: 44, justifyContent: "center", alignItems: "center" }}
+            >
+              <Icon.Ionicons color={iOSColors.gray} name={Platform.OS === "ios" ? "ios-close" : "md-close"} size={26} />
             </TouchableOpacity>
           </View>
         </View>

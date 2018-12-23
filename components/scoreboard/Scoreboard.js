@@ -45,9 +45,9 @@ import Colors from "../../constants/Colors";
 import GlobalStyles from "../../screens/styles";
 import storeUrl from "../../utils/storeUrl";
 
-const HEADER_MAX_HEIGHT = 260;
-const HEADER_MIN_HEIGHT = 0; //Platform.OS === "ios" ? 60 : 73;
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+// const HEADER_MAX_HEIGHT = 260;
+// const HEADER_MIN_HEIGHT = 0; //Platform.OS === "ios" ? 60 : 73;
+// const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 const initialState = {
   currentUser: null,
@@ -55,7 +55,8 @@ const initialState = {
   reversed: false,
   selectedPost: null,
   scrollY: new Animated.Value(0),
-  orientation: "portrait"
+  orientation: "portrait",
+  scoreboardViewHeight: 0
 };
 
 class Scoreboard extends React.PureComponent {
@@ -182,7 +183,7 @@ class Scoreboard extends React.PureComponent {
     const { gameUid } = this.props;
     const appName = Constants.manifest.name;
     const title = `${appName}`;
-    const message = `Watch this game on ${appName}. ${storeUrl() || ''}`;
+    const message = `Watch this game on ${appName}. ${storeUrl() || ""}`;
 
     await Share.share(
       {
@@ -193,15 +194,15 @@ class Scoreboard extends React.PureComponent {
       {
         tintColor: Constants.manifest.tintColor,
         excludedActivityTypes: [
-          'com.apple.UIKit.activity.Print',
-          'com.apple.UIKit.activity.AssignToContact',
-          'com.apple.UIKit.activity.AddToReadingList',
-          'com.apple.UIKit.activity.OpenInIBooks',
-          'com.apple.UIKit.activity.MarkupAsPDF',
-          'com.apple.reminders.RemindersEditorExtension', // Reminders
-          'com.apple.mobilenotes.SharingExtension', // Notes
-          'com.apple.mobileslideshow.StreamShareService', // iCloud Photo Sharing - This also does nothing :{
-        ],
+          "com.apple.UIKit.activity.Print",
+          "com.apple.UIKit.activity.AssignToContact",
+          "com.apple.UIKit.activity.AddToReadingList",
+          "com.apple.UIKit.activity.OpenInIBooks",
+          "com.apple.UIKit.activity.MarkupAsPDF",
+          "com.apple.reminders.RemindersEditorExtension", // Reminders
+          "com.apple.mobilenotes.SharingExtension", // Notes
+          "com.apple.mobileslideshow.StreamShareService" // iCloud Photo Sharing - This also does nothing :{
+        ]
         // Android only:
         //dialogTitle: "Share BAM goodness"
         // iOS only:
@@ -392,8 +393,8 @@ class Scoreboard extends React.PureComponent {
     const { currentUser } = firebase.auth();
 
     LayoutAnimation.linear();
-    
-    return (    
+
+    return (
       <FlatList
         contentContainerStyle={[
           { flexGrow: 1, backgroundColor: iOSColors.lightGray },
@@ -480,20 +481,16 @@ class Scoreboard extends React.PureComponent {
     const leftScore = reversed ? awayTeamScore : homeTeamScore;
     const rightScore = reversed ? homeTeamScore : awayTeamScore;
 
-    const scoreBarBounce = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE - 100, HEADER_SCROLL_DISTANCE - 50, HEADER_SCROLL_DISTANCE],
-      outputRange: [-150, -150, 50, 0],
-      extrapolate: "clamp"
-    });
-
+    const { scoreboardViewHeight } = this.state;
+    const scoreboardHeight = scoreboardViewHeight > 0 ? scoreboardViewHeight : 300;
     const scoreBarOpacity = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE - 1, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 0, 1],
+      inputRange: [0, scoreboardHeight - 3, scoreboardHeight - 2, scoreboardHeight - 1, scoreboardHeight],
+      outputRange: [0, 0, 0.85, 0.9, 0.95],
       extrapolate: "clamp"
     });
 
     return (
-      <View style={{ flex: 1, paddingTop: 10 }}>
+      <View style={{ flex: 1 }}>
         <Animated.ScrollView
           ref="_scrollView"
           contentContainerStyle={{ flexGrow: 1 }}
@@ -503,7 +500,12 @@ class Scoreboard extends React.PureComponent {
             useNativeDriver: true
           })}
         >
-          <View style={[landscapeStyle]}>
+          <View
+            style={[landscapeStyle]}
+            onLayout={e => {
+              this.setState({ scoreboardViewHeight: e.nativeEvent.layout.height });
+            }}
+          >
             {/* Team names / Swapper */}
             <View style={{ flexDirection: "row" }}>
               <View style={{ flex: 1, justifyContent: "center" }}>
@@ -567,43 +569,26 @@ class Scoreboard extends React.PureComponent {
             </View>
 
             {/* Set Scores */}
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                padding: 20
-              }}
-            >
-              <SetScores game={game} reversed={reversed} />
-            </View>
+            <SetScores game={game} reversed={reversed} />
           </View>
 
           {this.state.orientation === "portrait" && this.renderPosts()}
         </Animated.ScrollView>
 
-        <Animated.View
-          style={[
-            styles.bar,
-            {
-              opacity: scoreBarOpacity,
-              transform: [{ translateY: scoreBarBounce }]
-            }
-          ]}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center"
-            }}
-          >
+        <Animated.View style={[styles.bar, { opacity: scoreBarOpacity }]}>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <View style={{ flex: 2 }}>
-              <Text style={[human.bodyWhite, {textAlign: "center"}]}>{leftTeamName}</Text>
-              <Text style={[human.title2White, {textAlign: "center"}]}>{leftScore}</Text>
+              <Text numberOfLines={1} style={[human.bodyWhite, { textAlign: "center" }]}>
+                {leftTeamName}
+              </Text>
+              <Text style={[human.title2White, { textAlign: "center" }]}>{leftScore}</Text>
             </View>
             <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>{this.renderSet()}</View>
             <View style={{ flex: 2 }}>
-              <Text style={[human.bodyWhite, {textAlign: "center"}]}>{rightTeamName}</Text>
-              <Text style={[human.title2White, {textAlign: "center"}]}>{rightScore}</Text>
+              <Text numberOfLines={1} style={[human.bodyWhite, { textAlign: "center" }]}>
+                {rightTeamName}
+              </Text>
+              <Text style={[human.title2White, { textAlign: "center" }]}>{rightScore}</Text>
             </View>
           </View>
         </Animated.View>
@@ -680,7 +665,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   bar: {
-    backgroundColor: Colors.primaryLightColor,
+    backgroundColor: Colors.primaryColor,
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
@@ -721,17 +706,8 @@ const mapStateToProps = state => {
     gameUid,
     game,
     orderedPosts,
-    // gameFetchStarted,
-    // gameFetchSucceeded,
-    // gameFetchFailed,
     gamePostsFetchSucceeded,
-    //gamePostsFetchFailed,
-    // gameScorePersistStarted,
-    // gameScorePersistSucceeded,
-    // gamePostPersistStarted,
     gamePostPersistSucceeded,
-    // gameSetPersistStarted,
-    // gameSetPersistSucceeded,
     isSavedGame
   };
 };
