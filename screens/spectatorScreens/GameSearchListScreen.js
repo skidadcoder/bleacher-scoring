@@ -1,7 +1,8 @@
 import _ from "lodash";
 import React from "react";
-import { connect } from "react-redux";
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { connect } from "react-redux";
+import { AdMobBanner } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { fetchNearbyGames, saveGame, selectGame, unSaveGame } from "../../actions/gameActions";
@@ -173,6 +174,15 @@ class GameSearchListScreen extends React.Component {
         <View style={{ flex: 1, backgroundColor: "#fff" }}>
           {this.state.fetchedLocation ? this.renderList() : this.renderGooglePlacesInput()}
         </View>
+
+        {this.state.fetchedLocation && (
+          <AdMobBanner
+            bannerSize="fullBanner"
+            adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+            testDeviceID="EMULATOR"
+            onDidFailToReceiveAdWithError={this.bannerError}
+          />
+        )}
       </SafeAreaView>
     );
   }

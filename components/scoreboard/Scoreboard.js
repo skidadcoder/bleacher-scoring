@@ -7,7 +7,6 @@ import {
   Dimensions,
   FlatList,
   LayoutAnimation,
-  Modal,
   Platform,
   SafeAreaView,
   Share,

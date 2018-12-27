@@ -1,8 +1,9 @@
 import _ from "lodash";
 import React from "react";
 import { connect } from "react-redux";
+import { AdMobBanner } from "expo";
 import { fetchUserGames, deleteGame, selectGame } from "../../actions/gameActions";
-import { ActivityIndicator, Alert, Button, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { ActivityIndicator, Alert, SafeAreaView, Text, View } from "react-native";
 import firebase from "firebase";
 import { human } from "react-native-typography";
 import HeaderBar from "../../components/HeaderBar";
@@ -102,7 +103,7 @@ class ScorerGameListScreen extends React.PureComponent {
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
         <HeaderBar hideBack={true} title="My Games" navigateTo="CreateGame" navigateToIcon="add" />
 
-        <ScrollView style={[GlobalStyles.scrollView]}>
+        <View style={[GlobalStyles.scrollView]}>
           {userGamesFetchStart && this.renderLoading()}
 
           {!userGamesFetchStart && userGames && userGames.length === 0 && this.renderEmptyList()}
@@ -115,7 +116,14 @@ class ScorerGameListScreen extends React.PureComponent {
               onGameEditPress={this.onGameEditPress}
             />
           )}
-        </ScrollView>
+        </View>
+
+        <AdMobBanner
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+          testDeviceID="EMULATOR"
+          onDidFailToReceiveAdWithError={this.bannerError}
+        />
       </SafeAreaView>
     );
   }

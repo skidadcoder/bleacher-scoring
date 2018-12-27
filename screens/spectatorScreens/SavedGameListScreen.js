@@ -2,6 +2,7 @@ import _ from "lodash";
 import React from "react";
 import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
+import { AdMobBanner } from "expo";
 import { saveGame, selectGame, unSaveGame, fetchFavoriteGames } from "../../actions/gameActions";
 import { MaterialIcons } from "@expo/vector-icons";
 import { human, iOSColors } from "react-native-typography";
@@ -80,7 +81,7 @@ class SavedGameListScreen extends React.Component {
         <GameList
           data={games}
           savedGames={this.props.savedGames}
-          onGamePress={this.onGamePress}          
+          onGamePress={this.onGamePress}
           onGameFavoritePress={this.onGameFavoritePress}
           onGameUnfavoritePress={this.onGameUnfavoritePress}
         />
@@ -121,6 +122,13 @@ class SavedGameListScreen extends React.Component {
         </View>
 
         <View style={[GlobalStyles.scrollView]}>{this.renderList()}</View>
+
+        <AdMobBanner
+          bannerSize="fullBanner"
+          adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+          testDeviceID="EMULATOR"
+          onDidFailToReceiveAdWithError={this.bannerError}
+        />
       </SafeAreaView>
     );
   }
