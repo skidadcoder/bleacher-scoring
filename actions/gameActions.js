@@ -405,7 +405,6 @@ export const fetchFavoriteGames = gameUids => {
     } else {
       Promise.all(
         gameUids.map(gameUid => {
-          console.log(gameUid);
           return db
             .orderByKey()
             .equalTo(gameUid)
