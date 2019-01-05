@@ -35,7 +35,13 @@ class ScorerGameListScreen extends React.PureComponent {
   }
 
   componentWillFocus = () => {
-    this.props.fetchUserGames();
+    const { currentUser } = firebase.auth();
+
+    if (currentUser) {
+      this.props.fetchUserGames();
+    } else {
+      this.props.navigation.navigate("Login");
+    }
   };
 
   componentWillUnmount() {

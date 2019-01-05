@@ -328,7 +328,7 @@ export const updateCurrentSet = ({ gameUid, currentSet }) => {
 };
 
 export const fetchUserGames = () => {
-  const { currentUser } = firebase.auth();
+    const { currentUser } = firebase.auth();
 
   return dispatch => {
     dispatch({ type: USER_GAMES_FETCH_START });

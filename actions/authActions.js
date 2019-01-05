@@ -31,6 +31,18 @@ export const displayNameChanged = text => {
   };
 };
 
+export const loginUserWithFacebook = ({ token }) => {
+  return dispatch => {
+    dispatch({ type: LOGIN_USER_START });
+    const credential = firebase.auth.FacebookAuthProvider.credential(token);
+    firebase
+      .auth()
+      .signInAndRetrieveDataWithCredential(credential)
+      .then(user => loginUserSuccess(dispatch, user))
+      .catch(error => loginUserFail(dispatch, error));
+  };
+};
+
 export const logInUser = ({ email, password }) => {
   return dispatch => {
     dispatch({ type: LOGIN_USER_START });

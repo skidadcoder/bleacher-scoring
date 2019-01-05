@@ -1,11 +1,12 @@
 import firebase from "firebase";
 import React from "react";
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Facebook } from "expo";
 import { connect } from "react-redux";
 import { TextField } from "react-native-material-textfield";
-import { emailChanged, passwordChanged, logInUser } from "../../actions/authActions";
+import { emailChanged, passwordChanged, logInUser, loginUserWithFacebook } from "../../actions/authActions";
 import { MaterialIcons } from "@expo/vector-icons";
-import { human, iOSColors } from "react-native-typography";
+import { human, iOSColors, robotoWeights } from "react-native-typography";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import HeaderBar from "../../components/HeaderBar";
 import { AppButton } from "../../components/Buttons";
@@ -108,14 +109,31 @@ class LoginScreen extends React.Component {
     this.password.blur();
   }
 
-  onButtonPress() {
+  onButtonPress = () => {
     if (this.state.formValid) {
       this.emailAddress.blur();
       this.password.blur();
       const { email, password } = this.props;
       this.props.logInUser({ email, password });
     }
-  }
+  };
+
+  onFacebookButtonPress = async () => {
+    const { type, token, expires, permissions, declinedPermissions } = await Facebook.logInWithReadPermissionsAsync(
+      "218649529019531",
+      {
+        permissions: ["public_profile"]
+      }
+    );
+
+    if (type === "success") {
+      // Get the user's name using Facebook's Graph API
+      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+      this.props.loginUserWithFacebook({ token });
+    } else {
+      // type === 'cancel'
+    }
+  };
 
   renderPasswordAccessory() {
     let { secureTextEntry } = this.state;
@@ -174,6 +192,21 @@ class LoginScreen extends React.Component {
               />
             </View>
 
+            <AppButton
+              label="LOG IN WITH FACEBOOK"
+              disabled={this.props.isLoading}
+              onPress={this.onFacebookButtonPress}
+              style={{ marginTop: 30, marginBottom: 30, backgroundColor: Colors.facebookColor }}
+              isLoading={this.props.isLoading}
+              icon="logo-facebook"
+            />
+
+            <View style={{ flex: 1, flexDirection: "row", alignContent: "center" }}>
+              <View style={styles.hr} />
+              <Text style={{ textAlign: "center", color: iOSColors.lightGray, margin: 5 }}>OR</Text>
+              <View style={styles.hr} />
+            </View>
+
             <View style={{ flex: 1 }}>
               <TextField
                 ref={this.emailAddressRef}
@@ -192,7 +225,7 @@ class LoginScreen extends React.Component {
                 error={this.state.formErrors.emailAddress}
                 value={this.props.email}
                 onChangeText={this.onEmailChange}
-                onSubmitEditing={this.onSubmitEmailAddress}                
+                onSubmitEditing={this.onSubmitEmailAddress}
                 textContentType="username"
               />
 
@@ -222,18 +255,20 @@ class LoginScreen extends React.Component {
               <AppButton
                 label="LOG IN"
                 disabled={this.props.isLoading}
-                onPress={() => this.onButtonPress()}
+                onPress={this.onButtonPress}
                 style={{ marginTop: 30, marginBottom: 30 }}
                 isLoading={this.props.isLoading}
               />
 
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("SignUp")}>
-                <Text style={[styles.button, { marginBottom: 20 }]}>Create an account</Text>
-              </TouchableOpacity>
+              <View style={{ flexDirection: "row", flex: 1, justifyContent: "space-between" }}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("SignUp")}>
+                  <Text style={[styles.button, { marginBottom: 20 }]}>Create an account</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("ForgotPassword")}>
-                <Text style={[styles.button]}>Forgot your password?</Text>
-              </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("ForgotPassword")}>
+                  <Text style={[styles.button]}>Forgot your password?</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </KeyboardAwareScrollView>
@@ -249,9 +284,16 @@ const styles = StyleSheet.create({
     color: "red"
   },
   button: {
-    ...human.bodyObject,
-    color: iOSColors.midGray,
+    ...human.footnoteObject,
+    color: iOSColors.gray,
     textAlign: "center"
+  },
+  hr: {
+    flex: 1,
+    height: 2,
+    alignSelf: "center",
+    borderBottomColor: iOSColors.gray,
+    borderBottomWidth: 1
   }
 });
 
@@ -270,6 +312,7 @@ export default connect(
   {
     emailChanged,
     passwordChanged,
-    logInUser
+    logInUser,
+    loginUserWithFacebook
   }
 )(LoginScreen);

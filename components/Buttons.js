@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { human, iOSColors } from "react-native-typography";
 import Colors from "../constants/Colors";
@@ -16,22 +10,12 @@ export class AppButton extends React.Component {
 
     return (
       <TouchableOpacity onPress={onPress} disabled={disabled}>
-        <View
-          style={[
-            styles.button,
-            disabled ? styles.disabledButton : styles.activeButton,
-            this.props.style
-          ]}
-        >
-          { isLoading && <ActivityIndicator />}
+        <View style={[styles.button, disabled ? styles.disabledButton : styles.activeButton, this.props.style]}>
+          {isLoading && <ActivityIndicator />}
 
-          <Ionicons
-            name={icon}
-            size={22}
-            style={
-              disabled ? styles.disabledButtonText : styles.activeButtonText
-            }
-          />
+          {!!icon && (
+            <Ionicons name={icon} size={22} style={disabled ? styles.disabledButtonText : styles.activeButtonText} />
+          )}
 
           <Text
             style={[

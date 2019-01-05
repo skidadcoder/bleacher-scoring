@@ -10,6 +10,7 @@ const secondaryColor = "#48A7BF";
 const backgroundColor = "#fff";
 const surfaceColor = "#fff";
 const errorColor = "#B00020";
+const facebookColor = "#4267b2";
 
 const scoreColorYellow = "rgb(247, 216, 80)";
 const scoreColorWhite = "rgb(255, 255, 255)";
@@ -30,6 +31,7 @@ export default {
   backgroundColor,
   surfaceColor,
   errorColor,
+  facebookColor,
   tabIconDefault: iconDefaultColor,
   tabIconSelected: tintColor,
   tabBar: "#fefefe",
