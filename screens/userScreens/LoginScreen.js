@@ -125,19 +125,21 @@ class LoginScreen extends React.Component {
   };
 
   onFacebookButtonPress = async () => {
-    const { type, token, expires, permissions, declinedPermissions } = await Facebook.logInWithReadPermissionsAsync(
-      "218649529019531",
-      {
-        permissions: ["public_profile"]
-      }
-    );
+    try {
+      const { type, token, expires, permissions, declinedPermissions } = await Facebook.logInWithReadPermissionsAsync(
+        "218649529019531",
+        {
+          permissions: ["public_profile"]
+        }
+      );
 
-    if (type === "success") {
-      // Get the user's name using Facebook's Graph API
-      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-      this.props.loginUserWithFacebook({ token });
-    } else {
-      // type === 'cancel'
+      if (type === "success") {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+        this.props.loginUserWithFacebook({ token });
+      }
+    } catch (message) {
+      console.log(message);
     }
   };
 
@@ -153,15 +155,10 @@ class LoginScreen extends React.Component {
       const { idToken, accessToken } = result;
 
       if (result.type === "success") {
-        //console.log(result);
-        //return result.accessToken;
         this.props.loginUserWithGoogle({ idToken, accessToken });
-      } else {
-        //return { cancelled: true };
       }
     } catch (e) {
       console.log(e);
-      //   return { error: true };
     }
   };
 
