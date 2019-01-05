@@ -27,6 +27,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bleachertechnologies.bleacherscoringvolleyball",
+      "googleSignIn": {
+        "reservedClientId": "986416512357-bcssirf57sa2q5lkmga8t4tmnvj5va98.apps.googleusercontent.com"
+     },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Bleacher Scoring uses your location to find games nearby.",
         "NSPhotoLibraryUsageDescription": "Bleacher Scoring allows you to upload photos to the scoreboard."

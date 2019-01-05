@@ -1,15 +1,21 @@
 import firebase from "firebase";
 import React from "react";
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Facebook } from "expo";
+import { Facebook, Google } from "expo";
 import { connect } from "react-redux";
 import { TextField } from "react-native-material-textfield";
-import { emailChanged, passwordChanged, logInUser, loginUserWithFacebook } from "../../actions/authActions";
+import {
+  emailChanged,
+  passwordChanged,
+  logInUser,
+  loginUserWithFacebook,
+  loginUserWithGoogle
+} from "../../actions/authActions";
 import { MaterialIcons } from "@expo/vector-icons";
 import { human, iOSColors, robotoWeights } from "react-native-typography";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import HeaderBar from "../../components/HeaderBar";
-import { AppButton } from "../../components/Buttons";
+import { AppButton, BrandedButton } from "../../components/Buttons";
 import GlobalStyles from "../styles";
 import Colors from "../../constants/Colors";
 
@@ -135,6 +141,30 @@ class LoginScreen extends React.Component {
     }
   };
 
+  onGoogleButtonPress = async () => {
+    try {
+      const result = await Google.logInAsync({
+        //androidClientId: YOUR_CLIENT_ID_HERE,
+        behavior: "web",
+        iosClientId: "843005735895-llgc59ng09ueo1hf3c5tnii6flpp3d3r.apps.googleusercontent.com",
+        scopes: ["profile", "email"]
+      });
+
+      const { idToken, accessToken } = result;
+
+      if (result.type === "success") {
+        //console.log(result);
+        //return result.accessToken;
+        this.props.loginUserWithGoogle({ idToken, accessToken });
+      } else {
+        //return { cancelled: true };
+      }
+    } catch (e) {
+      console.log(e);
+      //   return { error: true };
+    }
+  };
+
   renderPasswordAccessory() {
     let { secureTextEntry } = this.state;
 
@@ -180,7 +210,7 @@ class LoginScreen extends React.Component {
           )}
 
           <View style={{ marginLeft: 30, marginRight: 30 }}>
-            <View style={{ padding: 20 }}>
+            <View style={{ padding: 16 }}>
               <Image
                 source={require("../../assets/images/logo-light-blue.png")}
                 style={{
@@ -192,18 +222,31 @@ class LoginScreen extends React.Component {
               />
             </View>
 
-            <AppButton
-              label="LOG IN WITH FACEBOOK"
+            <BrandedButton
+              label="SIGN IN WITH FACEBOOK"
+              imageSource={require("../../assets/images/f-ogo_RGB_HEX-58.png")}
+              buttonColor="#4267B2"
+              textColor="#ffffff"
               disabled={this.props.isLoading}
               onPress={this.onFacebookButtonPress}
-              style={{ marginTop: 30, marginBottom: 30, backgroundColor: Colors.facebookColor }}
+              style={{ marginBottom: 16, marginTop: 24 }}
               isLoading={this.props.isLoading}
-              icon="logo-facebook"
             />
 
-            <View style={{ flex: 1, flexDirection: "row", alignContent: "center" }}>
+            <BrandedButton
+              label="SIGN IN WITH GOOGLE"
+              imageSource={require("../../assets/images/g-logo.png")}
+              buttonColor="white"
+              textColor="rgba(0,0,0,0.54)"
+              disabled={this.props.isLoading}
+              onPress={this.onGoogleButtonPress}
+              style={{ marginBottom: 24 }}
+              isLoading={this.props.isLoading}
+            />
+
+            <View style={{ flex: 1, flexDirection: "row", alignContent: "center", marginTop: 8 }}>
               <View style={styles.hr} />
-              <Text style={{ textAlign: "center", color: iOSColors.lightGray, margin: 5 }}>OR</Text>
+              <Text style={{ textAlign: "center", color: iOSColors.lightGray, marginLeft: 8, marginRight: 8 }}>OR</Text>
               <View style={styles.hr} />
             </View>
 
@@ -256,7 +299,7 @@ class LoginScreen extends React.Component {
                 label="LOG IN"
                 disabled={this.props.isLoading}
                 onPress={this.onButtonPress}
-                style={{ marginTop: 30, marginBottom: 30 }}
+                style={{ marginTop: 16, marginBottom: 16 }}
                 isLoading={this.props.isLoading}
               />
 
@@ -313,6 +356,7 @@ export default connect(
     emailChanged,
     passwordChanged,
     logInUser,
-    loginUserWithFacebook
+    loginUserWithFacebook,
+    loginUserWithGoogle
   }
 )(LoginScreen);

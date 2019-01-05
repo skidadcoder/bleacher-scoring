@@ -43,6 +43,18 @@ export const loginUserWithFacebook = ({ token }) => {
   };
 };
 
+export const loginUserWithGoogle = ({ idToken, accessToken }) => {
+  return dispatch => {
+    dispatch({ type: LOGIN_USER_START });
+    const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+    firebase
+      .auth()
+      .signInAndRetrieveDataWithCredential(credential)
+      .then(user => loginUserSuccess(dispatch, user))
+      .catch(error => loginUserFail(dispatch, error));
+  };
+};
+
 export const logInUser = ({ email, password }) => {
   return dispatch => {
     dispatch({ type: LOGIN_USER_START });
