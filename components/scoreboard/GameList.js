@@ -149,59 +149,56 @@ export default class GameList extends React.PureComponent {
 
     return (
       <TouchableHighlight onPress={onGamePress(game)} style={styles.rowFront} underlayColor={iOSColors.lightGray2}>
-        <View>
-          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-            <View style={{ flex: 3, flexDirection: "row", marginRight: 5 }}>
-              <View style={{ flex: 1 }}>
-                <Text numberOfLines={1} style={this.isWinner(false, game) ? styles.winner : styles.loser}>
-                  {game.awayTeamName}
-                </Text>
-                <Text numberOfLines={1} style={this.isWinner(true, game) ? styles.winner : styles.loser}>
-                  {game.homeTeamName}
-                </Text>
-              </View>
-
-              {game.sets.map((set, i) => {
-                if (
-                  i <= game.currentSet ||
-                  (game.currentSet === "Final" && (set.homeTeamScore > 0 || set.awayTeamScore > 0))
-                ) {
-                  return (
-                    <View key={i} style={{ marginRight: 5 }}>
-                      <Text
-                        style={[this.isWinner(false, game) ? styles.winner : styles.loser, { textAlign: "center" }]}
-                      >
-                        {set.awayTeamScore}
-                      </Text>
-                      <Text style={[this.isWinner(true, game) ? styles.winner : styles.loser, { textAlign: "center" }]}>
-                        {set.homeTeamScore}
-                      </Text>
-                    </View>
-                  );
-                }
-              })}
-            </View>
-            <View style={{ flex: 2, borderLeftColor: iOSColors.lightGray, borderLeftWidth: 1, paddingLeft: 10 }}>
-              <View style={{ backgroundColor: Colors.primaryLightColor, borderRadius: 5, padding: 3 }}>
-                <Text numberOfLines={1} style={[human.footnoteWhite, { textAlign: "center" }]}>
-                  {game.currentSet === "Final" ? "Final" : "Set " + game.currentSet}
-                </Text>
-              </View>
+        <View style={{ flexDirection: "row", alignItems: "top", justifyContent: "space-between" }}>
+          <View style={{ flex: 3, flexDirection: "row", marginRight: 5 }}>
+            <View style={{ flex: 1 }}>
+              <Text numberOfLines={1} style={this.isWinner(false, game) ? styles.winner : styles.loser}>
+                {game.awayTeamName}
+              </Text>
+              <Text numberOfLines={1} style={this.isWinner(true, game) ? styles.winner : styles.loser}>
+                {game.homeTeamName}
+              </Text>
               <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginTop: 3 }]}>
                 {game.venueName}
               </Text>
-              {!!game.displayName && (
-                <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginTop: 3 }]}>
-                  By: {game.displayName}
-                </Text>
-              )}
-              <View style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}>
-                <Icon.MaterialIcons name="update" size={16} color={iOSColors.gray} />
-                <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginLeft: 2 }]}>
-                  {/* {moment(game.lastUpdate).format("ddd, M/D, h:mm a")} */}
-                  {moment(game.lastUpdate).fromNow()}
-                </Text>
-              </View>
+            </View>
+
+            {game.sets.map((set, i) => {
+              if (
+                i <= game.currentSet ||
+                (game.currentSet === "Final" && (set.homeTeamScore > 0 || set.awayTeamScore > 0))
+              ) {
+                return (
+                  <View key={i} style={{ marginRight: 5 }}>
+                    <Text style={[this.isWinner(false, game) ? styles.winner : styles.loser, { textAlign: "center" }]}>
+                      {set.awayTeamScore}
+                    </Text>
+                    <Text style={[this.isWinner(true, game) ? styles.winner : styles.loser, { textAlign: "center" }]}>
+                      {set.homeTeamScore}
+                    </Text>
+                  </View>
+                );
+              }
+            })}
+          </View>
+          <View style={{ flex: 2, borderLeftColor: iOSColors.lightGray, borderLeftWidth: 1, paddingLeft: 10 }}>
+            <View style={{ backgroundColor: Colors.primaryLightColor, borderRadius: 5, padding: 3 }}>
+              <Text numberOfLines={1} style={[human.footnoteWhite, { textAlign: "center" }]}>
+                {game.currentSet === "Final" ? "Final" : "Set " + game.currentSet}
+              </Text>
+            </View>
+
+            {!!game.displayName && (
+              <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginTop: 3 }]}>
+                By: {game.displayName}
+              </Text>
+            )}
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}>
+              <Icon.MaterialIcons name="update" size={16} color={iOSColors.gray} />
+              <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginLeft: 2 }]}>
+                {/* {moment(game.lastUpdate).format("ddd, M/D, h:mm a")} */}
+                {moment(game.lastUpdate).fromNow()}
+              </Text>
             </View>
           </View>
         </View>

@@ -480,13 +480,14 @@ class Scoreboard extends React.PureComponent {
     const leftScore = reversed ? awayTeamScore : homeTeamScore;
     const rightScore = reversed ? homeTeamScore : awayTeamScore;
 
-    const { scoreboardViewHeight } = this.state;
-    const scoreboardHeight = scoreboardViewHeight > 0 ? scoreboardViewHeight : 300;
-    const scoreBarOpacity = this.state.scrollY.interpolate({
-      inputRange: [0, scoreboardHeight - 3, scoreboardHeight - 2, scoreboardHeight - 1, scoreboardHeight],
-      outputRange: [0, 0, 0.85, 0.9, 0.95],
-      extrapolate: "clamp"
-    });
+    //PUT THIS BACK AFTER WE FIGURE OUT HOW TO DROP THE SCRE IN FROM THE TOP
+    // const { scoreboardViewHeight } = this.state;
+    // const scoreboardHeight = scoreboardViewHeight > 0 ? scoreboardViewHeight : 300;
+    // const scoreBarOpacity = this.state.scrollY.interpolate({
+    //   inputRange: [0, scoreboardHeight - 3, scoreboardHeight - 2, scoreboardHeight - 1, scoreboardHeight],
+    //   outputRange: [0, 0, 0.85, 0.9, 0.95],
+    //   extrapolate: "clamp"
+    // });
 
     return (
       <View style={{ flex: 1 }}>
@@ -574,7 +575,7 @@ class Scoreboard extends React.PureComponent {
           {this.state.orientation === "portrait" && this.renderPosts()}
         </Animated.ScrollView>
 
-        <Animated.View style={[styles.bar, { opacity: scoreBarOpacity }]}>
+        {/* <Animated.View style={[styles.bar, { opacity: scoreBarOpacity }]}>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <View style={{ flex: 2 }}>
               <Text numberOfLines={1} style={[human.bodyWhite, { textAlign: "center" }]}>
@@ -590,7 +591,7 @@ class Scoreboard extends React.PureComponent {
               <Text style={[human.title2White, { textAlign: "center" }]}>{rightScore}</Text>
             </View>
           </View>
-        </Animated.View>
+        </Animated.View> */}
 
         {this.state.orientation === "portrait" && currentUser && (
           <GamePostInput selectedPost={this.state.selectedPost} cancel={() => this.onPostInputCancel()} />
