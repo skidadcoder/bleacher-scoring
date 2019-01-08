@@ -35,8 +35,8 @@
     "android": {
       "package": "com.bleachertechnologies.bleacherscoringvolleyball"
     },
-    "facebookScheme":"fb218649529019531",
+    "facebookScheme": "fb218649529019531",
     "facebookAppId": "218649529019531",
-    "facebookDisplayName":"Bleacher Scoring"
+    "facebookDisplayName": "Bleacher Scoring"
   }
 }
