@@ -1,12 +1,13 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { AppLoading, Asset, Font, Icon } from "expo";
+import { AppLoading, Asset, Constants, Font, Icon } from "expo";
 import firebase from "firebase";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/lib/integration/react";
 import { persistor, store } from "./store";
 import AppContainer from "./navigation/AppNavigator";
-
+import getEnvVars from "./environment";
+ 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -17,13 +18,10 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.ALL);
-
-    //Google Place API: AIzaSyDMoSbI-QRLp7llUH_Gqrwz4WnI-IXGjlY
     const config = {
       apiKey: "AIzaSyBfskI7Ziimj-JwCushuVthGfWh1JMKtPs",
       authDomain: "bleacher-tech.firebaseapp.com",
-      databaseURL: "https://bleacher-tech-bcd3c.firebaseio.com/",
+      databaseURL: getEnvVars.databaseUrl,
       projectId: "bleacher-tech",
       storageBucket: "bleacher-tech.appspot.com",
       //messagingSenderId: "843005735895"
