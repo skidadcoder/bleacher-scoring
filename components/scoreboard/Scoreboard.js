@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { AdMobInterstitial, Constants } from "expo";
+import { AdMobInterstitial, Constants, KeepAwake } from "expo";
 import { connect } from "react-redux";
 import { withNavigation } from "react-navigation";
 import {
@@ -644,6 +644,7 @@ class Scoreboard extends React.PureComponent {
 
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
+        <KeepAwake />
         <HeaderBar {...headerSettings} />
 
         {!gameExists && (
