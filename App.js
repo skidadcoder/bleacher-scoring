@@ -18,6 +18,8 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT_UP);
+
     const config = {
       apiKey: "AIzaSyBfskI7Ziimj-JwCushuVthGfWh1JMKtPs",
       authDomain: "bleacher-tech.firebaseapp.com",
