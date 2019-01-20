@@ -21,12 +21,12 @@ export default class App extends React.Component {
 
     //Google Place API: AIzaSyDMoSbI-QRLp7llUH_Gqrwz4WnI-IXGjlY
     const config = {
-      apiKey: "AIzaSyBx0dQOFs7EW0O4Fx5fu1LKCDDGFmfl9LQ",
-      authDomain: "bleacher-scoring.firebaseapp.com",
-      databaseURL: "https://bleacher-scoring.firebaseio.com",
-      projectId: "bleacher-scoring",
-      storageBucket: "bleacher-scoring.appspot.com",
-      messagingSenderId: "843005735895"
+      apiKey: "AIzaSyBfskI7Ziimj-JwCushuVthGfWh1JMKtPs",
+      authDomain: "bleacher-tech.firebaseapp.com",
+      databaseURL: "https://bleacher-tech-bcd3c.firebaseio.com/",
+      projectId: "bleacher-tech",
+      storageBucket: "bleacher-tech.appspot.com",
+      //messagingSenderId: "843005735895"
     };
     firebase.initializeApp(config);
   }

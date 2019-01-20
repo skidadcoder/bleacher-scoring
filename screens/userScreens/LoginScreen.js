@@ -148,12 +148,11 @@ class LoginScreen extends React.Component {
       const result = await Google.logInAsync({
         //androidClientId: YOUR_CLIENT_ID_HERE,
         behavior: "web",
-        iosClientId: "843005735895-llgc59ng09ueo1hf3c5tnii6flpp3d3r.apps.googleusercontent.com",
+        iosClientId: "501872305874-aori48d36fm0e5krv4sqg9n3ndm2e4fo.apps.googleusercontent.com",
         scopes: ["profile", "email"]
       });
 
-      const { idToken, accessToken } = result;
-
+      const { idToken, accessToken } = result;      
       if (result.type === "success") {
         this.props.loginUserWithGoogle({ idToken, accessToken });
       }

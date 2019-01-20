@@ -66,7 +66,7 @@ class GameSearchListScreen extends React.Component {
         onPress={(data, details = null) => this.onGooglePlacesAutocompletePress(data, details)}
         getDefaultValue={() => ""}
         query={{
-          key: "AIzaSyDMoSbI-QRLp7llUH_Gqrwz4WnI-IXGjlY",
+          key: "AIzaSyB9PHRdkmkUmAgPYV-M2Pmf9T5CyIeHB4w",
           language: "en" // language of the results
         }}
         styles={{
