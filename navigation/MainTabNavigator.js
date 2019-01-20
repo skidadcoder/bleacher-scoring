@@ -56,9 +56,9 @@ const ScorerStack = createStackNavigator(
   {
     ScorerGameList: ScorerGameListScreen,
     CreateGame: CreateGameScreen,
+    ScoringLocation: ScoringLocationScreen,
     Scoring: ScoringScreen,
     ImageGallery: ScorerImageGalleryScreen,
-    ScoringLocation: ScoringLocationScreen,
     EditGame: EditGameScreen
   },
   {

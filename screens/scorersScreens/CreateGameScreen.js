@@ -22,7 +22,7 @@ class CreateGameScreen extends React.Component {
 
       const { game } = nextProps;
       this.props.selectGame({ game });
-      this.props.navigation.navigate("Scoring", { navigateBack: "ScorerGameList" });
+      this.props.navigation.navigate("ScoringLocation");
     }
 
     if (nextProps.gamePersistFailed) {
@@ -70,7 +70,7 @@ class CreateGameScreen extends React.Component {
         }}
       >
         <GameForm {...this.props} />
-        <AppButton label="CREATE GAME" style={{ marginTop: 20 }} onPress={this.onCreateGamePress} />
+        <AppButton label="NEXT" style={{ marginTop: 20 }} onPress={this.onCreateGamePress} />
       </View>
     );
   }

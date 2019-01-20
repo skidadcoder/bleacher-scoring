@@ -9,6 +9,7 @@ import { updateGameLocation } from "../../actions/gameActions";
 import HeaderBar from "../../components/HeaderBar";
 import Colors from "../../constants/Colors";
 import GlobalStyles from "../styles";
+import { AppButton } from "../../components/Buttons";
 
 class ScoringLocationScreen extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class ScoringLocationScreen extends React.Component {
       });
 
       this.state.fetchedLocation = undefined;
-      this.props.navigation.navigate("Scoring");
+      this.props.navigation.navigate("Scoring", { navigateBack: "ScorerGameList" });
     }
   };
 
@@ -55,9 +56,10 @@ class ScoringLocationScreen extends React.Component {
   renderGooglePlacesInput = () => {
     return (
       <GooglePlacesAutocomplete
-        placeholder="Search locations..."
+        enablePoweredByContainer={false}
+        placeholder="Search cities..."
         minLength={3} // minimum length of text to search
-        autoFocus={true}
+        //autoFocus={true}
         returnKeyType={"search"} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
         listViewDisplayed={false} // true/false/undefined
         fetchDetails={true}
@@ -69,15 +71,30 @@ class ScoringLocationScreen extends React.Component {
           language: "en" // language of the results
         }}
         styles={{
-          predefinedPlacesDescription: { color: Colors.secondaryColor, fontSize: 16 },
-          textInputContainer: { height: 54 },
-          textInput: { height: 38, fontSize: 16 },
-          description: { fontSize: 16 }
+          container: { backgroundColor: Colors.primaryColor },
+          //predefinedPlacesDescription: { color: Colors.secondaryColor, fontSize: 16 },
+          textInputContainer: {
+            backgroundColor: Colors.primaryColor,
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+            margin: 10
+          },
+          textInput: {
+            backgroundColor: Colors.primaryLightColor,
+            color: iOSColors.lightGray,
+            height: 44,
+            fontSize: 18
+          },
+          row: { paddingLeft: 20 },
+          //powered: { backgroundColor: Colors.primaryColor },
+          //poweredContainer: { backgroundColor: Colors.primaryColor },
+          description: { color: iOSColors.white, fontSize: 16 },
+          separator: { backgroundColor: iOSColors.lightGray }
         }}
         nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
         filterReverseGeocodingByTypes={["locality", "administrative_area_level_3"]}
-        currentLocation={true} // Will add a "Current location" button at the top of the predefined places list
-        currentLocationLabel="Current location"
+        //currentLocation={true} // Will add a "Current location" button at the top of the predefined places list
+        //currentLocationLabel="Current location"
         debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
       />
     );
@@ -88,9 +105,24 @@ class ScoringLocationScreen extends React.Component {
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
         <HeaderBar
           title="Pin to location"
-          confirmAction={this.state.fetchedLocation ? () => this.onPinToLocationPress() : undefined}
+          navigateBack="Scoring"
+          //confirmAction={this.state.fetchedLocation ? () => this.onPinToLocationPress() : undefined}
         />
         <View style={{ flex: 1, backgroundColor: "#fff" }}>{this.renderGooglePlacesInput()}</View>
+
+        <View style={{ margin: 20 }}>
+          {!this.state.fetchedLocation && (
+            <AppButton
+              label="SKIP"
+              style={{ marginTop: 20 }}
+              onPress={() => this.props.navigation.navigate("Scoring")}
+            />
+          )}
+
+          {this.state.fetchedLocation && (
+            <AppButton label="NEXT" style={{ marginTop: 20 }} onPress={this.onPinToLocationPress} />
+          )}
+        </View>
       </SafeAreaView>
     );
   }

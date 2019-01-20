@@ -57,7 +57,7 @@ class GameSearchListScreen extends React.Component {
   renderGooglePlacesInput = () => {
     return (
       <GooglePlacesAutocomplete
-        placeholder="Search locations..."
+        placeholder="Search cities..."
         minLength={3} // minimum length of text to search
         returnKeyType={"search"}
         listViewDisplayed={true} // true/false/undefined
