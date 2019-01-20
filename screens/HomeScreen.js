@@ -19,11 +19,6 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
-    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.ALL);
-
-    this.setOrientation(Dimensions.get("window"));
-    Dimensions.addEventListener("change", this.onDimensionChange);
-
     Linking.getInitialURL().then(url => {
       this.navigate(url);
     });
@@ -32,7 +27,6 @@ export default class HomeScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    Dimensions.removeEventListener("change", this.onDimensionChange);
     Linking.removeEventListener("url", this.handleOpenURL);
   }
 
@@ -84,7 +78,7 @@ export default class HomeScreen extends React.Component {
               />
             )}
 
-             {orientation === "landscape" && (
+            {orientation === "landscape" && (
               <ImageBackground
                 style={{
                   flex: 1,

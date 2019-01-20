@@ -65,7 +65,7 @@ class Scoreboard extends React.PureComponent {
   }
 
   async componentDidMount() {
-    Dimensions.addEventListener("change", this.onDimensionChange);
+    //Dimensions.addEventListener("change", this.onDimensionChange);
 
     // AdMobInterstitial.setAdUnitID("ca-app-pub-3940256099942544/1033173712"); // Test ID, Replace with your-admob-unit-id
     // AdMobInterstitial.setTestDeviceID("EMULATOR");
@@ -86,7 +86,7 @@ class Scoreboard extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    Dimensions.removeEventListener("change", this.onDimensionChange);
+    //Dimensions.removeEventListener("change", this.onDimensionChange);
 
     const { gameUid } = this.props;
     firebase
