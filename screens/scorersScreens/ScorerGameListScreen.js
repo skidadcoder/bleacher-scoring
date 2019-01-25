@@ -9,6 +9,7 @@ import { human } from "react-native-typography";
 import HeaderBar from "../../components/HeaderBar";
 import GlobalStyles from "../styles";
 import GameList from "../../components/scoreboard/GameList";
+import getEnvVars from "../../environment";
 
 const initialState = { data: null, fetchError: null };
 
@@ -126,7 +127,7 @@ class ScorerGameListScreen extends React.PureComponent {
 
         <AdMobBanner
           bannerSize="fullBanner"
-          adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+          adUnitID={getEnvVars.adMobUnitIDScorerGameList}
           testDeviceID="EMULATOR"
           onDidFailToReceiveAdWithError={this.bannerError}
         />

@@ -10,6 +10,7 @@ import HeaderBar from "../../components/HeaderBar";
 import GameList from "../../components/scoreboard/GameList";
 import Colors from "../../constants/Colors";
 import GlobalStyles from "../styles";
+import getEnvVars from "../../environment";
 
 class SavedGameListScreen extends React.Component {
   constructor(props) {
@@ -125,7 +126,7 @@ class SavedGameListScreen extends React.Component {
 
         <AdMobBanner
           bannerSize="fullBanner"
-          adUnitID="ca-app-pub-3940256099942544/6300978111" // Test ID, Replace with your-admob-unit-id
+          adUnitID={getEnvVars.adMobUnitIDSavedGameList}
           testDeviceID="EMULATOR"
           onDidFailToReceiveAdWithError={this.bannerError}
         />
