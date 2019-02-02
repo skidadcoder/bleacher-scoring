@@ -25,11 +25,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
       "bundleIdentifier": "com.bleachertechnologies.bleacherscoringvolleyball",
+      "buildNumber": "1.0.0",
+      "icon": "./assets/icon.png",
+      "supportsTablet": true,
+      "isTabletOnly": false,
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#ffffff"
+      },
+      "googleSignIn": {
+        "reservedClientId": "com.googleusercontent.apps.501872305874-crvnq10vrhfug3qco7bh3lfmialc3a0l"
+      },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Bleacher Scoring uses your location to find games nearby.",
-        "NSPhotoLibraryUsageDescription": "Bleacher Scoring allows you to upload photos to the scoreboard."
+        "NSPhotoLibraryUsageDescription": "Bleacher Scoring allows you to share photos with others watching the same game."
       }
     },
     "android": {

@@ -220,7 +220,7 @@ class LoginScreen extends React.Component {
 
             <BrandedButton
               label="SIGN IN WITH FACEBOOK"
-              imageSource={require("../../assets/images/f-ogo_RGB_HEX-58.png")}
+              imageSource={require("../../assets/images/f-logo.png")}
               buttonColor="#4267B2"
               textColor="#ffffff"
               disabled={this.props.isLoading}
