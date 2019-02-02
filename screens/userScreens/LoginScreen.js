@@ -18,7 +18,6 @@ import HeaderBar from "../../components/HeaderBar";
 import { AppButton, BrandedButton } from "../../components/Buttons";
 import GlobalStyles from "../styles";
 import Colors from "../../constants/Colors";
-import getEnvVars from "../../environment";
 
 const initialState = {
   secureTextEntry: true,
@@ -149,7 +148,8 @@ class LoginScreen extends React.Component {
       const result = await Google.logInAsync({
         //androidClientId: YOUR_CLIENT_ID_HERE,
         behavior: "web",
-        iosClientId: getEnvVars.iosStandaloneAppClientId,
+        iosClientId: "501872305874-aori48d36fm0e5krv4sqg9n3ndm2e4fo.apps.googleusercontent.com",
+        iosStandaloneAppClientId: "501872305874-crvnq10vrhfug3qco7bh3lfmialc3a0l.apps.googleusercontent.com",
         scopes: ["profile", "email"]
       });
 
