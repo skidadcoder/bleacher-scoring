@@ -59,7 +59,6 @@ export default class App extends React.Component {
         require("./assets/images/f-logo.png"),
         require("./assets/images/g-logo.png"),
         require("./assets/images/home-screen.png"),
-        require("./assets/images/home-screen-landscape.png"),
         require("./assets/images/logo-light-blue.png"),
         require("./assets/images/scoring-walkthrough-end.png"),
         require("./assets/images/scoring-walkthrough-pin.png"),

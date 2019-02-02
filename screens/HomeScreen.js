@@ -10,7 +10,9 @@ export default class HomeScreen extends React.Component {
     super(props);
 
     this.state = {
-      orientation: "portrait"
+      orientation: "portrait",
+      height: undefined,
+      width: undefined
     };
   }
 
@@ -41,59 +43,21 @@ export default class HomeScreen extends React.Component {
     }
   };
 
-  onDimensionChange = dimensions => {
-    this.setOrientation(dimensions.window);
-  };
-
-  setOrientation = window => {
-    const { height, width } = window;
-
-    if (height >= width) {
-      this.setState({ orientation: "portrait" });
-    } else {
-      this.setState({ orientation: "landscape" });
-    }
-  };
-
   render() {
     const { orientation } = this.state;
-
     return (
       <View style={[GlobalStyles.screenRootView]}>
         <StatusBar barStyle="light-content" />
 
-        <View style={{ flex: 1 }}>
-          <View style={{ flex: 3 }}>
-            {orientation === "portrait" && (
-              <ImageBackground
-                style={{
-                  flex: 1,
-                  width: null,
-                  height: null,
-                  justifyContent: "center",
-                  alignContent: "center",
-                  padding: 20
-                }}
-                source={require("../assets/images/home-screen.png")}
-              />
-            )}
-
-            {orientation === "landscape" && (
-              <ImageBackground
-                style={{
-                  flex: 1,
-                  width: null,
-                  height: null,
-                  justifyContent: "center",
-                  alignContent: "center",
-                  padding: 20
-                }}
-                source={require("../assets/images/home-screen-landscape.png")}
-              />
-            )}
-          </View>
-
-          <View style={{ flex: 1 }}>
+        <ImageBackground
+          style={{
+            flex: 1
+          }}
+          imageStyle={{ width: undefined, height: undefined }}
+          source={require("../assets/images/home-screen.png")}
+        >
+          <View style={{ flex: 1 }} />
+          <View style={{ height: 150 }}>
             <View style={styles.menuButtonRow}>
               <MenuItem
                 icon="counter"
@@ -107,7 +71,7 @@ export default class HomeScreen extends React.Component {
               />
             </View>
           </View>
-        </View>
+        </ImageBackground>
       </View>
     );
   }
