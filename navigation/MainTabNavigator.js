@@ -6,6 +6,7 @@ import TabBarIcon from "../components/TabBarIcon";
 import TabBarIconMaterialCommunity from "../components/TabBarIconMaterialCommunity";
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/userScreens/SettingsScreen";
+import PrivacyPolicyScreen from "../screens/userScreens/PrivacyPolicyScreen";
 import ChangeDisplayNameScreen from "../screens/userScreens/ChangeDisplayNameScreen";
 import ChangeEmailAddressScreen from "../screens/userScreens/ChangeEmailAddressScreen";
 import ChangeProfilePicScreen from "../screens/userScreens/ChangeProfilePicScreen";
@@ -80,7 +81,8 @@ const SettingsStack = createStackNavigator(
     ChangeProfilePic: ChangeProfilePicScreen,
     ChangePassword: ChangePasswordScreen,
     ReportBug: ReportBugScreen,
-    ReportImprovement: ReportImprovementScreen
+    ReportImprovement: ReportImprovementScreen,
+    PrivacyPolicy: PrivacyPolicyScreen
   },
   {
     headerMode: "none"

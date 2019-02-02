@@ -225,6 +225,24 @@ class SettingsScreen extends React.Component {
               </View> */}
 
               <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("PrivacyPolicy")}
+              >
+                <View style={styles.settingsSectionContent}>
+                  <Text style={[human.body, styles.label]}>
+                    Privacy Policy
+                  </Text>
+                  <View style={styles.navContainer}>
+                    <Ionicons
+                      name="ios-arrow-forward"
+                      size={30}
+                      color={iOSColors.gray}
+                      style={{ alignSelf: "flex-end" }}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.navigate("ReportImprovement")
                 }
