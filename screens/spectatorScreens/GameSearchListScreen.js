@@ -76,7 +76,7 @@ class GameSearchListScreen extends React.Component {
           textInput: { height: 38, fontSize: 16 },
           description: { fontSize: 16 }
         }}
-        nearbyPlacesAPI="None" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+        nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
         filterReverseGeocodingByTypes={["locality", "administrative_area_level_3"]}
         currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
         //currentLocationLabel="Tap to search your current location"
