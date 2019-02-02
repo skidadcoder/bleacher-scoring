@@ -91,9 +91,9 @@ class ScoringLocationScreen extends React.Component {
           description: { color: iOSColors.white, fontSize: 16 },
           separator: { backgroundColor: iOSColors.lightGray }
         }}
-        nearbyPlacesAPI="GoogleReverseGeocoding" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+        nearbyPlacesAPI="None" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
         filterReverseGeocodingByTypes={["locality", "administrative_area_level_3"]}
-        //currentLocation={true} // Will add a "Current location" button at the top of the predefined places list
+        currentLocation={false} // Will add a "Current location" button at the top of the predefined places list
         //currentLocationLabel="Current location"
         debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
       />
