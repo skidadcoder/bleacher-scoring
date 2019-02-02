@@ -30,18 +30,20 @@
       "icon": "./assets/icon.png",
       "supportsTablet": true,
       "isTabletOnly": false,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Bleacher Scoring uses your location to find games nearby.",
+        "NSPhotoLibraryUsageDescription": "Bleacher Scoring allows you to share photos with others watching the same game."
+      },
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.501872305874-crvnq10vrhfug3qco7bh3lfmialc3a0l"
+        }        
+      },
       "splash": {
         "image": "./assets/splash.png",
         "resizeMode": "cover",
         "backgroundColor": "#ffffff"
-      },
-      "googleSignIn": {
-        "reservedClientId": "com.googleusercontent.apps.501872305874-crvnq10vrhfug3qco7bh3lfmialc3a0l"
-      },
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Bleacher Scoring uses your location to find games nearby.",
-        "NSPhotoLibraryUsageDescription": "Bleacher Scoring allows you to share photos with others watching the same game."
-      }
+      }      
     },
     "android": {
       "package": "com.bleachertechnologies.bleacherscoringvolleyball"
