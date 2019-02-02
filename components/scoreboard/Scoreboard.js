@@ -631,7 +631,7 @@ class Scoreboard extends React.PureComponent {
     let headerSettings = {};
     if (gameExists) {
       headerSettings = {
-        title: game.venueName,
+        //title: "asdf",//game.venueName,
         shareAction: () => this.onShareGamePress(),
         unfavoriteAction: !canScore && this.props.isSavedGame ? () => this.onUnfavoriteGamePress(false) : undefined,
         favoriteAction: !canScore && !this.props.isSavedGame ? () => this.onFavoriteGamePress() : undefined,
