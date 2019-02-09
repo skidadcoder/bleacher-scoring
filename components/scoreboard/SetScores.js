@@ -13,14 +13,14 @@ export default class SetScores extends React.Component {
     const { currentSet } = game;
     const _currentSet = currentSet === "Final" ? 6 : currentSet;
 
-    return game.sets.map(function(set, i) {
+    return game.sets.map(function (set, i) {
       const leftScore = reversed ? set.awayTeamScore : set.homeTeamScore;
       const rightScore = !reversed ? set.awayTeamScore : set.homeTeamScore;
       const borderColor = i === _currentSet ? iOSColors.white : Colors.primaryLightColor;
       const backgroundColor = i === _currentSet ? Colors.primaryLightColor : Colors.primaryColor;
 
       return (
-        <View key={i} style={{justifyContent: "center", alignItems: "center"}}>
+        <View key={i} style={{ justifyContent: "center", alignItems: "center", marginLeft: 2 }}>
           <Text style={[material.body1White, { textAlign: "center", marginBottom: 5 }]}>Set {i}</Text>
           <View
             style={[
@@ -30,8 +30,9 @@ export default class SetScores extends React.Component {
                 borderWidth: 2,
                 borderRadius: 4,
                 padding: 4,
-                paddingLeft: 8,
-                paddingRight: 8
+                paddingLeft: 2,
+                paddingRight: 2,
+                width: 72
               }
             ]}
           >
@@ -45,7 +46,16 @@ export default class SetScores extends React.Component {
   }
 
   render() {
-    return <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", margin: 8, marginBottom: 16 }}>{this.renderSets()}</View>;
+    return <View style={{
+      flex: 1, 
+      flexDirection: "row",
+      justifyContent: "center",
+      marginTop: 8, 
+      marginBottom: 16, 
+      //borderTopColor: iOSColors.midGray, 
+      //borderTopWidth: 2, 
+      paddingTop: 8
+    }}>{this.renderSets()}</View>;
   }
 }
 

@@ -55,6 +55,7 @@ export default class HomeScreen extends React.Component {
           }}
           imageStyle={{ width: undefined, height: undefined }}
           source={require("../assets/images/home-screen.png")}
+          resizeMode="contain"
         >
           <View style={{ flex: 1 }} />
           <View style={{ height: 150 }}>
