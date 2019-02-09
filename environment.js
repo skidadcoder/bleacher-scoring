@@ -5,7 +5,8 @@ const ENV = {
     databaseUrl: "https://bleacher-tech-vb-8ee23.firebaseio.com/",
     adMobUnitIDSavedGameList: "ca-app-pub-3940256099942544/6300978111",
     adMobUnitIDScorerGameList:"ca-app-pub-3940256099942544/6300978111",
-    adMobUnitIDSearchGameList:"ca-app-pub-3940256099942544/6300978111",    
+    adMobUnitIDSearchGameList:"ca-app-pub-3940256099942544/6300978111",  
+    adMobUnitIDScoreboardInterstitial:"ca-app-pub-3940256099942544/1033173712",  
     adMobAppId: "ca-app-pub-9134982336587133~6469499803"
   },
   staging: {
@@ -13,6 +14,7 @@ const ENV = {
     adMobUnitIDSavedGameList: "ca-app-pub-3940256099942544/6300978111",
     adMobUnitIDScorerGameList:"ca-app-pub-3940256099942544/6300978111",
     adMobUnitIDSearchGameList:"ca-app-pub-3940256099942544/6300978111",    
+    adMobUnitIDScoreboardInterstitial:"ca-app-pub-3940256099942544/1033173712",  
     adMobAppId: "ca-app-pub-9134982336587133~6469499803"
   },
   prod: {
@@ -20,6 +22,7 @@ const ENV = {
     adMobUnitIDSavedGameList: "ca-app-pub-9134982336587133/6827983649",
     adMobUnitIDScorerGameList:"ca-app-pub-9134982336587133/5837377741",
     adMobUnitIDSearchGameList:"ca-app-pub-9134982336587133/1131845976",    
+    adMobUnitIDScoreboardInterstitial:"ca-app-pub-9134982336587133/4223860821",  
     adMobAppId: "ca-app-pub-9134982336587133~6469499803"
   }
 }

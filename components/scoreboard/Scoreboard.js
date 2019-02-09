@@ -43,7 +43,7 @@ import GamePostInput from "../../components/scoreboard/GamePostInput";
 import Colors from "../../constants/Colors";
 import GlobalStyles from "../../screens/styles";
 import storeUrl from "../../utils/storeUrl";
-
+import getEnvVars from "../../environment"
 // const HEADER_MAX_HEIGHT = 260;
 // const HEADER_MIN_HEIGHT = 0; //Platform.OS === "ios" ? 60 : 73;
 // const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
@@ -67,8 +67,11 @@ class Scoreboard extends React.PureComponent {
   async componentDidMount() {
     //Dimensions.addEventListener("change", this.onDimensionChange);
 
-    // AdMobInterstitial.setAdUnitID("ca-app-pub-3940256099942544/1033173712"); // Test ID, Replace with your-admob-unit-id
-    // AdMobInterstitial.setTestDeviceID("EMULATOR");
+    AdMobInterstitial.setAdUnitID(getEnvVars.adMobUnitIDScoreboardInterstitial);
+    AdMobInterstitial.setTestDeviceID("EMULATOR");
+    await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
+    await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
+
     // AdMobInterstitial.addEventListener("interstitialDidLoad", () => console.log("interstitialDidLoad"));
     // AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => console.log("interstitialDidFailToLoad"));
     // AdMobInterstitial.addEventListener("interstitialDidOpen", () => console.log("interstitialDidOpen"));
@@ -77,8 +80,6 @@ class Scoreboard extends React.PureComponent {
     //   console.log("interstitialWillLeaveApplication")
     // );
 
-    // await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
-    // await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
 
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     this.props.fetchGameById({ gameUid });
@@ -341,7 +342,7 @@ class Scoreboard extends React.PureComponent {
 
     let _currentSet = currentSet === "Final" ? 6 : currentSet;
     let wins = 0;
-    game.sets.map(function(set, i) {
+    game.sets.map(function (set, i) {
       if (i < _currentSet) {
         const leftScore = reversed ? set.awayTeamScore : set.homeTeamScore;
         const rightScore = reversed ? set.homeTeamScore : set.awayTeamScore;
@@ -369,7 +370,7 @@ class Scoreboard extends React.PureComponent {
       >
         {Array(wins)
           .fill()
-          .map(function(item, i) {
+          .map(function (item, i) {
             return (
               <View
                 key={i}
@@ -463,7 +464,7 @@ class Scoreboard extends React.PureComponent {
     let homeTeamScore = 0;
 
     if (game.currentSet === "Final") {
-      game.sets.map(function(set, i) {
+      game.sets.map(function (set, i) {
         if (set !== "Final") {
           if (set.homeTeamScore > set.awayTeamScore) {
             homeTeamScore++;
@@ -525,16 +526,16 @@ class Scoreboard extends React.PureComponent {
                 {game.currentSet !== "Final" ? (
                   this.renderIncrementor(() => this.onIncrementScorePress(!this.state.reversed, leftScore))
                 ) : (
-                  <View />
-                )}
+                    <View />
+                  )}
               </View>
               <View style={{ flex: 1 }}>{this.renderIncrementor(() => this.onIncrementSetPress())}</View>
               <View style={{ flex: 1 }}>
                 {game.currentSet !== "Final" ? (
                   this.renderIncrementor(() => this.onIncrementScorePress(this.state.reversed, rightScore))
                 ) : (
-                  <View />
-                )}
+                    <View />
+                  )}
               </View>
             </View>
 
@@ -555,16 +556,16 @@ class Scoreboard extends React.PureComponent {
                 {game.currentSet !== "Final" ? (
                   this.renderDecrementor(() => this.onDecrementScorePress(!this.state.reversed, leftScore))
                 ) : (
-                  <View />
-                )}
+                    <View />
+                  )}
               </View>
               <View style={{ flex: 1 }}>{this.renderDecrementor(() => this.onDecrementSetPress())}</View>
               <View style={{ flex: 1 }}>
                 {game.currentSet !== "Final" ? (
                   this.renderDecrementor(() => this.onDecrementScorePress(this.state.reversed, rightScore))
                 ) : (
-                  <View />
-                )}
+                    <View />
+                  )}
               </View>
             </View>
 
@@ -689,13 +690,13 @@ const mapStateToProps = state => {
     _.map(posts, (val, uid) => {
       return { ...val, postUid: uid };
     }),
-    function(dateObj) {
+    function (dateObj) {
       return new Date(dateObj.postDate);
     }
   ).reverse();
 
   //check if this is a saved game
-  var savedGame = _.find(state.savedGames, function(g) {
+  var savedGame = _.find(state.savedGames, function (g) {
     return g.gameUid === gameUid;
   });
   let isSavedGame = false;
