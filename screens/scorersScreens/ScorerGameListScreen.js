@@ -5,7 +5,7 @@ import { AdMobBanner } from "expo";
 import { fetchUserGames, deleteGame, selectGame } from "../../actions/gameActions";
 import { ActivityIndicator, Alert, SafeAreaView, Text, View } from "react-native";
 import firebase from "firebase";
-import { human } from "react-native-typography";
+import { human, iOSColors } from "react-native-typography";
 import HeaderBar from "../../components/HeaderBar";
 import GlobalStyles from "../styles";
 import GameList from "../../components/scoreboard/GameList";
@@ -67,7 +67,7 @@ class ScorerGameListScreen extends React.PureComponent {
             this.props.deleteGame({ gameUid });
           }
         },
-        { text: "NO", onPress: () => {} }
+        { text: "NO", onPress: () => { } }
       ],
       { cancelable: false }
     );
@@ -105,6 +105,7 @@ class ScorerGameListScreen extends React.PureComponent {
 
   render() {
     const { userGames, userGamesFetchStart } = this.props;
+    const { hasAd } = this.state;
 
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
@@ -125,12 +126,13 @@ class ScorerGameListScreen extends React.PureComponent {
           )}
         </View>
 
-        <AdMobBanner
-          bannerSize="fullBanner"
-          adUnitID={getEnvVars.adMobUnitIDScorerGameList}
-          testDeviceID="EMULATOR"
-          onDidFailToReceiveAdWithError={this.bannerError}
-        />
+        <View style={{ backgroundColor: iOSColors.white }}>
+          <AdMobBanner
+            bannerSize="smartBannerPortrait"
+            adUnitID={getEnvVars.adMobUnitIDScorerGameList}
+            testDeviceID="EMULATOR"
+          />
+        </View>
       </SafeAreaView>
     );
   }
@@ -144,7 +146,7 @@ const mapStateToProps = state => {
     _.map(state.userGames.data, (val, uid) => {
       return { ...val, gameUid: uid };
     }),
-    function(dateObj) {
+    function (dateObj) {
       return new Date(dateObj.lastUpdate);
     }
   ).reverse();

@@ -177,12 +177,14 @@ class GameSearchListScreen extends React.Component {
         </View>
 
         {this.state.fetchedLocation && (
-          <AdMobBanner
-            bannerSize="fullBanner"
-            adUnitID={getEnvVars.adMobUnitIDSearchGameList}
-            testDeviceID="EMULATOR"
-            onDidFailToReceiveAdWithError={this.bannerError}
-          />
+          <View style={{ backgroundColor: iOSColors.white }}>
+            <AdMobBanner
+              bannerSize="fullBanner"
+              adUnitID={getEnvVars.adMobUnitIDSearchGameList}
+              testDeviceID="EMULATOR"
+              onDidFailToReceiveAdWithError={this.bannerError}
+            />
+          </View>
         )}
       </SafeAreaView>
     );
@@ -196,7 +198,7 @@ const mapStateToProps = state => {
     _.map(data, (val, uid) => {
       return { ...val, gameUid: uid };
     }),
-    function(dateObj) {
+    function (dateObj) {
       return new Date(dateObj.lastUpdate);
     }
   ).reverse();
