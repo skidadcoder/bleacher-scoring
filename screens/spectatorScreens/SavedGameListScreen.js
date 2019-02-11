@@ -17,7 +17,7 @@ class SavedGameListScreen extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
+  componentDidMount() {    
     const gameUids = this.props.savedGames.map(g => g.gameUid);
     this.props.fetchFavoriteGames(gameUids);
   }

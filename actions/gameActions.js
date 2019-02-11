@@ -243,11 +243,11 @@ _persistGamePost = ({ gameUid, postUid, body, imageUri, image }) => {
               //no image exists for post ref so just move on
               return Promise.resolve();
             }
-          );         
+          );
         }
       })
       .then(() => dispatch({ type: GAME_POST_PERSIST_SUCCESS }))
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
         dispatch({ type: GAME_POST_PERSIST_FAIL });
       });
@@ -297,7 +297,7 @@ export const updateGameScore = ({ gameUid, isHome, currentSet, newScore }) => {
     firebase
       .database()
       .ref()
-      .update(updateGame, function(error) {
+      .update(updateGame, function (error) {
         if (error) {
           console.log(error);
         }
@@ -328,7 +328,7 @@ export const updateCurrentSet = ({ gameUid, currentSet }) => {
 };
 
 export const fetchUserGames = () => {
-    const { currentUser } = firebase.auth();
+  const { currentUser } = firebase.auth();
 
   return dispatch => {
     dispatch({ type: USER_GAMES_FETCH_START });
@@ -401,7 +401,7 @@ export const fetchFavoriteGames = gameUids => {
     dispatch({ type: FAVORITE_GAMES_FETCH_START });
 
     if (gameUids.length === 0) {
-      dispatch({ type: FAVORITE_GAMES_FETCH_SUCCESS });
+      dispatch({ type: FAVORITE_GAMES_FETCH_SUCCESS, payload: [] });
     } else {
       Promise.all(
         gameUids.map(gameUid => {
@@ -414,7 +414,7 @@ export const fetchFavoriteGames = gameUids => {
                 if (!snapshot.val()) {
                   dispatch({ type: REMOVE_SAVED_GAME, payload: gameUid }); //remove from favorites if game is deleted
                 } else {
-                  dispatch({ type: FAVORITE_GAME_FETCH_SUCCESS, payload: snapshot.val() });
+                  dispatch({ type: FAVORITE_GAMES_FETCH_SUCCESS, payload: snapshot.val() });
                 }
               },
               error => {
