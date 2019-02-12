@@ -142,7 +142,7 @@ class GameSearchListScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
-        <HeaderBar title="Games" backAction={this.onClearPress} />
+        <HeaderBar title="Find Games" backAction={this.onClearPress} hideBack={!this.state.fetchedLocation} />
 
         {/* Tabs */}
         <View style={{ flexDirection: "row" }}>
@@ -179,7 +179,7 @@ class GameSearchListScreen extends React.Component {
         {this.state.fetchedLocation && (
           <View style={{ backgroundColor: iOSColors.white }}>
             <AdMobBanner
-              bannerSize="fullBanner"
+              bannerSize="smartBannerPortrait"
               adUnitID={getEnvVars.adMobUnitIDSearchGameList}
               testDeviceID="EMULATOR"
             />

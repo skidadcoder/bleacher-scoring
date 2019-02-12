@@ -79,7 +79,7 @@ class SavedGameListScreen extends React.Component {
           }}
         >
           <Text style={[human.body]}>
-            You have not saved any games. Games can be saved from the "Find Games" or "Scoreboard" screens.
+            You have no favorites.
           </Text>
         </View>
       );
@@ -101,7 +101,7 @@ class SavedGameListScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
-        <HeaderBar title="Games" backAction={() => this.props.navigation.navigate("Home")} />
+        <HeaderBar title="Favorite Games" hideBack={true} />
 
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: 1 }}>
@@ -134,10 +134,9 @@ class SavedGameListScreen extends React.Component {
 
         <View style={{ backgroundColor: iOSColors.white }}>
           <AdMobBanner
-            bannerSize="fullBanner"
+            bannerSize="smartBannerPortrait"
             adUnitID={getEnvVars.adMobUnitIDSavedGameList}
             testDeviceID="EMULATOR"
-            onDidFailToReceiveAdWithError={this.bannerError}
           />
         </View>
       </SafeAreaView>

@@ -103,24 +103,19 @@ class ScoringLocationScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
-        <HeaderBar
-          title="Pin to location"
-          navigateBack="Scoring"
-          //confirmAction={this.state.fetchedLocation ? () => this.onPinToLocationPress() : undefined}
-        />
+        <HeaderBar title="Pin to location" hideBack={true} />
+
         <View style={{ flex: 1, backgroundColor: "#fff" }}>{this.renderGooglePlacesInput()}</View>
 
-        <View style={{ margin: 20 }}>
-          {!this.state.fetchedLocation && (
-            <AppButton
-              label="SKIP"
-              style={{ marginTop: 20 }}
-              onPress={() => this.props.navigation.navigate("Scoring")}
-            />
-          )}
+        <View style={{ flexDirection: "row", margin: 20 }}>
+          <View style={{ flex: 1 }}>
+            <AppButton label="SKIP" style={{ marginTop: 20 }} onPress={() => this.props.navigation.navigate("Scoring")} />
+          </View>
 
           {this.state.fetchedLocation && (
-            <AppButton label="NEXT" style={{ marginTop: 20 }} onPress={this.onPinToLocationPress} />
+            <View style={{ flex: 1 }}>
+              <AppButton label="NEXT" style={{ marginTop: 20, marginLeft: 8 }} onPress={this.onPinToLocationPress} />
+            </View>
           )}
         </View>
       </SafeAreaView>
