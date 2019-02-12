@@ -182,7 +182,6 @@ class GameSearchListScreen extends React.Component {
               bannerSize="fullBanner"
               adUnitID={getEnvVars.adMobUnitIDSearchGameList}
               testDeviceID="EMULATOR"
-              onDidFailToReceiveAdWithError={this.bannerError}
             />
           </View>
         )}

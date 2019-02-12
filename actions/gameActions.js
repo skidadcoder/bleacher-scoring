@@ -378,7 +378,7 @@ export const fetchNearbyGames = location => {
       .startAt(loFilter)
       .endAt(hiFilter)
       .limitToLast(100)
-      .on(
+      .once(
         "value",
         snapshot => {
           dispatch({

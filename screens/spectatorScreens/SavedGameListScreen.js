@@ -1,4 +1,5 @@
 import _ from "lodash";
+import firebase from "firebase";
 import React from "react";
 import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
@@ -17,9 +18,16 @@ class SavedGameListScreen extends React.Component {
     super(props);
   }
 
-  componentDidMount() {    
+  componentDidMount() {
     const gameUids = this.props.savedGames.map(g => g.gameUid);
     this.props.fetchFavoriteGames(gameUids);
+  }
+
+  componentWillUnmount() {
+    firebase
+      .database()
+      .ref(`/games`)
+      .off();
   }
 
   componentWillReceiveProps(nextProps) {
