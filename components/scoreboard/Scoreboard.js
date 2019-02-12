@@ -99,7 +99,7 @@ class Scoreboard extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { gamePostPersistSucceeded, gamePostsFetchSucceeded } = nextProps;
+    const { gamePostPersistSucceeded, gamePostsFetchSucceeded, game } = nextProps;
 
     if (gamePostsFetchSucceeded) {
       this.setState({ loadingPosts: false });
@@ -111,10 +111,15 @@ class Scoreboard extends React.PureComponent {
         animated: true
       });
     }
+
+    if (game.currentSet > this.props.game.currentSet) {
+      this.showInterstitial();
+    }
   }
 
-  showInterstitial() {
-    AdMobInterstitial.requestAd(() => AdMobInterstitial.showAd());
+  showInterstitial = async () => {
+    await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
+    await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
   }
 
   setOrientation = window => {
