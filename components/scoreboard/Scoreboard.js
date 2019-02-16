@@ -251,6 +251,8 @@ class Scoreboard extends React.PureComponent {
     };
 
     this.props.saveGame({ game });
+
+    this.showInterstitial();
   };
 
   onUnfavoriteGamePress = navToFavs => {

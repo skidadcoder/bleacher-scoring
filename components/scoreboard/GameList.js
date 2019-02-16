@@ -2,11 +2,12 @@ import _ from "lodash";
 import moment from "moment";
 import React from "react";
 import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
-import { Icon } from "expo";
+import { AdMobInterstitial, Icon } from "expo";
 import { human, iOSColors } from "react-native-typography";
 import { SwipeListView } from "react-native-swipe-list-view";
 import Colors from "../../constants/Colors";
 import timeHelpers from "../../timeHelpers";
+import getEnvVars from "../../environment"
 
 const initialState = {};
 
@@ -14,6 +15,16 @@ export default class GameList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = initialState;
+  }
+
+  async componentDidMount() {
+    AdMobInterstitial.setAdUnitID(getEnvVars.adMobUnitIDScoreboardInterstitial);
+    AdMobInterstitial.setTestDeviceID("EMULATOR");
+  }
+
+  showInterstitial = async () => {
+    await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
+    await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
   }
 
   closeRow = (rowMap, rowKey) => {
@@ -41,6 +52,7 @@ export default class GameList extends React.PureComponent {
   onFavoritePress = (rowMap, item) => e => {
     this.closeRow(rowMap, item.gameUid);
     this.props.onGameFavoritePress(item);
+    this.showInterstitial();
   };
 
   onUnfavoritePress = (rowMap, item) => e => {
@@ -58,7 +70,7 @@ export default class GameList extends React.PureComponent {
     const currentSet = game.currentSet === "Final" ? 6 : game.currentSet;
     const score = { homeTeamScore: 0, awayTeamScore: 0 };
 
-    game.sets.map(function(set, i) {
+    game.sets.map(function (set, i) {
       if (i < currentSet) {
         if (set.awayTeamScore > set.homeTeamScore) {
           score.awayTeamScore++;
@@ -74,7 +86,7 @@ export default class GameList extends React.PureComponent {
   isSavedGame = item => {
     const { savedGames } = this.props;
 
-    var foundGame = _.find(savedGames, function(o) {
+    var foundGame = _.find(savedGames, function (o) {
       return o.gameUid === item.gameUid;
     });
 
@@ -187,7 +199,7 @@ export default class GameList extends React.PureComponent {
               </View>
               <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginTop: 3 }]}>
                 {`${game.venueName}, ${game.address || "Unknown address"}`}
-              </Text>              
+              </Text>
             </View>
             <View style={{ flex: 1, paddingLeft: 10 }}>
               <View style={{ backgroundColor: Colors.primaryLightColor, borderRadius: 5, padding: 3 }}>
