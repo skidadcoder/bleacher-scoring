@@ -8,10 +8,8 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FAVORITE_GAMES_FETCH_START:
-      console.log("FAVORITE_GAMES_FETCH_START")
       return { ...state, data: {}, favoriteGamesFetchStarted: true };
     case FAVORITE_GAMES_FETCH_SUCCESS:
-      console.log("FAVORITE_GAMES_FETCH_SUCCESS")      
       return { ...state, data: { ...state.data, ...action.payload }, favoriteGamesFetchStarted: false };
     default:
       return state;
