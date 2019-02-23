@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, YellowBox } from "react-native";
 import { AppLoading, Asset, Constants, Font, Icon } from "expo";
 import firebase from "firebase";
 import { Provider } from "react-redux";
@@ -18,6 +18,8 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    YellowBox.ignoreWarnings(['Setting a timer']);
+    
     Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT_UP);
 
     const config = {

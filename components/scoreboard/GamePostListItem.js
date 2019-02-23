@@ -109,6 +109,10 @@ class GamePostListItem extends React.PureComponent {
     }
   };
 
+  onRequestClose = () => {
+    console.log("this.onPostModalRequestClose");
+  }
+
   renderAuthor(author) {
     if (author) {
       return <Text style={[styles.author]}>{author}</Text>;
@@ -173,7 +177,7 @@ class GamePostListItem extends React.PureComponent {
 
   renderPostModal(onDeletePost, onEditPost) {
     return (
-      <Modal animationType="slide" transparent={true} visible={this.state.postModalVisible}>
+      <Modal animationType="slide" transparent={true} visible={this.state.postModalVisible} onRequestClose={this.onRequestClose}>
         <TouchableWithoutFeedback onPress={() => this.setState({ postModalVisible: false })}>
           <View style={styles.bottomSheetContainer} />
         </TouchableWithoutFeedback>
@@ -210,7 +214,7 @@ class GamePostListItem extends React.PureComponent {
 
   renderPicModal = () => {
     return (
-      <Modal animationType="slide" transparent={true} visible={this.state.picModalVisible}>
+      <Modal animationType="slide" transparent={true} visible={this.state.picModalVisible} onRequestClose={this.onRequestClose}>
         <TouchableWithoutFeedback onPress={() => this.setState({ picModalVisible: false })}>
           <View style={styles.bottomSheetContainer} />
         </TouchableWithoutFeedback>

@@ -116,12 +116,17 @@ class ImageGallery extends React.Component {
     this.setState({ selectedImageIndex: index, selectedImageUrl: image.source.uri });
   };
 
+  onRequestClose = () => {
+    console.log("this.onPostModalRequestClose");
+  }
+
   renderPicModal = () => {
     return (
           <Modal
             animationType="slide"
             transparent={true}
             visible={this.state.picModalVisible}
+            onRequestClose={this.onRequestClose}
           >
             <TouchableWithoutFeedback onPress={() => this.setState({ picModalVisible: false })}>
               <View style={styles.bottomSheetContainer} />
