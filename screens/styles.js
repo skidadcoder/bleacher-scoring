@@ -1,10 +1,12 @@
-import { StyleSheet } from "react-native";
+
+import { Platform, StatusBar, StyleSheet } from "react-native";
 import Colors from "../constants/Colors";
 
 export default StyleSheet.create({
   screenRootView: {
     backgroundColor: Colors.primaryColor,
-    flex: 1
+    flex: 1,
+    marginTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight
   },
   screenRootViewLight: {
     backgroundColor: "#fff",
