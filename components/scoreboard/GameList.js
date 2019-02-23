@@ -163,7 +163,7 @@ export default class GameList extends React.PureComponent {
     return (
       <TouchableHighlight onPress={onGamePress(game)} style={styles.rowFront} underlayColor={iOSColors.lightGray2}>
         <View>
-          <View style={{ flexDirection: "row", alignItems: "top", justifyContent: "space-between" }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <View style={{ flex: 3, borderRightColor: iOSColors.lightGray, borderRightWidth: 1 }}>
               <View style={{ flex: 1, flexDirection: "row", marginRight: 5 }}>
                 <View style={{ flex: 1 }}>
