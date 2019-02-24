@@ -69,9 +69,12 @@ class Scoreboard extends React.PureComponent {
 
     AdMobInterstitial.setAdUnitID(getEnvVars.adMobUnitIDScoreboardInterstitial);
     AdMobInterstitial.setTestDeviceID("EMULATOR");
-    await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
-    await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
 
+    const { canScore } = this.props;
+    if (!canScore) {
+      await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
+      await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
+    }
     // AdMobInterstitial.addEventListener("interstitialDidLoad", () => console.log("interstitialDidLoad"));
     // AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => console.log("interstitialDidFailToLoad"));
     // AdMobInterstitial.addEventListener("interstitialDidOpen", () => console.log("interstitialDidOpen"));
@@ -83,7 +86,7 @@ class Scoreboard extends React.PureComponent {
 
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     this.props.fetchGameById({ gameUid });
-    this.props.fetchGamePostsById({ gameUid });    
+    this.props.fetchGamePostsById({ gameUid });
   }
 
   componentWillUnmount() {
