@@ -197,7 +197,8 @@ class ImageGallery extends React.Component {
           onSingleTapConfirmed={this.onLongPress}
           onLongPress={this.onLongPress}
           onPageSelected={this.onPageSelected}
-          initialPage={imageIndex}
+          //initialPage={imageIndex}
+          initialPage={1}
         />
         {this.renderPicModal()}
       </SafeAreaView>
