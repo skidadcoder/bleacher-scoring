@@ -163,8 +163,8 @@ class GamePostInput extends React.Component {
   };
 
   onPostPress = () => {
-    const { gameUid } = this.props;
     const { postUid, body, imageUri, image } = this.state;
+    const { gameUid } = this.props;
 
     if (postUid) {
       this.props.updateGamePost({
@@ -347,11 +347,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { gameUid } = state.selectedGame;
   const { gamePostPersistStarted, gamePostPersistSucceeded, gamePostPersistFailed } = state.gamePost;
 
   return {
-    gameUid,
     gamePostPersistStarted,
     gamePostPersistSucceeded,
     gamePostPersistFailed

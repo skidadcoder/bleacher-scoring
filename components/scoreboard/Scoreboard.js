@@ -83,13 +83,13 @@ class Scoreboard extends React.PureComponent {
 
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     this.props.fetchGameById({ gameUid });
-    this.props.fetchGamePostsById({ gameUid });
+    this.props.fetchGamePostsById({ gameUid });    
   }
 
   componentWillUnmount() {
     //Dimensions.removeEventListener("change", this.onDimensionChange);
 
-    const { gameUid } = this.props;
+    const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     firebase
       .database()
       .ref(`/games/${gameUid}`)
@@ -454,6 +454,7 @@ class Scoreboard extends React.PureComponent {
 
   renderScoreboard = game => {
     const { currentUser } = firebase.auth();
+    const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
 
     let landscapeStyle = {};
     if (this.state.orientation === "landscape") {
@@ -602,7 +603,7 @@ class Scoreboard extends React.PureComponent {
         </Animated.View> */}
 
         {this.state.orientation === "portrait" && currentUser && (
-          <GamePostInput selectedPost={this.state.selectedPost} cancel={() => this.onPostInputCancel()} />
+          <GamePostInput gameUid={gameUid} selectedPost={this.state.selectedPost} cancel={() => this.onPostInputCancel()} />
         )}
 
         {this.state.orientation === "portrait" && !currentUser && (
