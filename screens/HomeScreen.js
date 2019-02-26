@@ -25,10 +25,16 @@ export default class HomeScreen extends React.Component {
       this.navigate(url);
     });
 
+    this.navListeners = [this.props.navigation.addListener("willFocus", this.componentWillFocus)];
     Linking.addEventListener("url", this.handleOpenURL);
   }
 
+  componentWillFocus = () => {
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+  };
+
   componentWillUnmount() {
+    this.navListeners.forEach(navListener => navListener.remove());    
     Linking.removeEventListener("url", this.handleOpenURL);
   }
 

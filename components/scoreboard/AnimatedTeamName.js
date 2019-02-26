@@ -1,6 +1,6 @@
 import React from "react";
 import { Animated, Easing, Text } from "react-native";
-import { human } from "react-native-typography";
+import { human, iOSColors } from "react-native-typography";
 
 export default class AnimatedTeamName extends React.Component {
   constructor(props) {
@@ -24,7 +24,7 @@ export default class AnimatedTeamName extends React.Component {
   }
 
   render() {
-    const { teamName } = this.props;
+    const { style, teamName } = this.props;
 
     const textFlip = this.state.flipAnimatedValue.interpolate({
       inputRange: [0, 90, 360],
@@ -35,12 +35,13 @@ export default class AnimatedTeamName extends React.Component {
       <Animated.Text
         numberOfLines={2}
         style={[
-          human.headlineWhite,
-          {
-            backfaceVisibility: "hidden",
-            textAlign: "center",
-            transform: [{ rotateY: textFlip }]
-          }
+           {
+             color: iOSColors.white,
+             backfaceVisibility: "hidden",
+             textAlign: "center",
+             transform: [{ rotateY: textFlip }]
+           },
+           style
         ]}
       >
         {teamName}

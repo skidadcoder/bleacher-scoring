@@ -19,11 +19,19 @@ class SavedGameListScreen extends React.Component {
   }
 
   componentDidMount() {
+    this.navListeners = [this.props.navigation.addListener("willFocus", this.componentWillFocus)];
+
     const gameUids = this.props.savedGames.map(g => g.gameUid);
     this.props.fetchFavoriteGames(gameUids);
   }
 
+  componentWillFocus = () => {
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+  };
+
   componentWillUnmount() {
+    this.navListeners.forEach(navListener => navListener.remove());
+    
     firebase
       .database()
       .ref(`/games`)

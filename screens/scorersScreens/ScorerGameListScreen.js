@@ -36,6 +36,7 @@ class ScorerGameListScreen extends React.PureComponent {
   }
 
   componentWillFocus = () => {
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);
     const { currentUser } = firebase.auth();
 
     if (currentUser) {

@@ -22,6 +22,18 @@ class GameSearchListScreen extends React.Component {
     this.state = initialState;
   }
 
+  componentDidMount() {
+    this.navListeners = [this.props.navigation.addListener("willFocus", this.componentWillFocus)];
+  }
+
+  componentWillFocus = () => {
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+  };
+
+  componentWillUnmount() {
+    this.navListeners.forEach(navListener => navListener.remove());    
+  }
+
   onClearPress = () => {
     if (this.state.fetchedLocation) {
       this.setState(initialState);

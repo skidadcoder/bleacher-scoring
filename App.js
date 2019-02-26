@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, View, YellowBox } from "react-native";
-import { AppLoading, Asset, Constants, Font, Icon } from "expo";
+import { StyleSheet, YellowBox } from "react-native";
+import { AppLoading, Asset, Font, Icon } from "expo";
 import firebase from "firebase";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/lib/integration/react";
@@ -18,9 +18,8 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    YellowBox.ignoreWarnings(['Setting a timer']);
-    
-    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT_UP);
+    YellowBox.ignoreWarnings(['Setting a timer']);    
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);
 
     const config = {
       apiKey: "AIzaSyBfskI7Ziimj-JwCushuVthGfWh1JMKtPs",

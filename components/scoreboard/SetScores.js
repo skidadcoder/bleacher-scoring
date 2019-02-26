@@ -16,7 +16,7 @@ export default class SetScores extends React.Component {
     return game.sets.map(function (set, i) {
       const leftScore = reversed ? set.awayTeamScore : set.homeTeamScore;
       const rightScore = !reversed ? set.awayTeamScore : set.homeTeamScore;
-      const borderColor = i === _currentSet ? iOSColors.white : Colors.primaryLightColor;
+      const borderColor = i === _currentSet ? iOSColors.lightGray2 : Colors.primaryLightColor;
       const backgroundColor = i === _currentSet ? Colors.primaryLightColor : Colors.primaryColor;
 
       return (
@@ -36,7 +36,7 @@ export default class SetScores extends React.Component {
               }
             ]}
           >
-            <Text style={[material.body2White, { textAlign: "center" }]}>
+            <Text style={[{ color: iOSColors.lightGray2, textAlign: "center" }]}>
               {leftScore} - {rightScore}
             </Text>
           </View>

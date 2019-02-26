@@ -36,6 +36,7 @@ class SettingsScreen extends React.Component {
 
   componentDidMount() {
     this.mounted = true;
+    this.navListeners = [this.props.navigation.addListener("willFocus", this.componentWillFocus)];
 
     firebase.auth().onAuthStateChanged(user => {
       if (!user) {
@@ -49,7 +50,12 @@ class SettingsScreen extends React.Component {
     });
   }
 
+  componentWillFocus = () => {
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+  };
+
   componentWillUnmount() {
+    this.navListeners.forEach(navListener => navListener.remove());   
     this.mounted = false;
   }
 

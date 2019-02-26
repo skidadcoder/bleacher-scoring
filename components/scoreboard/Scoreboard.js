@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { AdMobInterstitial, Constants, KeepAwake } from "expo";
+import { AdMobInterstitial, Constants, KeepAwake, ScreenOrientation } from "expo";
 import { connect } from "react-redux";
 import { withNavigation } from "react-navigation";
 import {
@@ -54,8 +54,7 @@ const initialState = {
   reversed: false,
   selectedPost: null,
   scrollY: new Animated.Value(0),
-  orientation: "portrait",
-  scoreboardViewHeight: 0
+  orientation: "portrait"
 };
 
 class Scoreboard extends React.PureComponent {
@@ -65,24 +64,22 @@ class Scoreboard extends React.PureComponent {
   }
 
   async componentDidMount() {
-    //Dimensions.addEventListener("change", this.onDimensionChange);
-
     AdMobInterstitial.setAdUnitID(getEnvVars.adMobUnitIDScoreboardInterstitial);
     AdMobInterstitial.setTestDeviceID("EMULATOR");
+    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+      console.log("interstitialDidClose")
+      console.log(this.state.orientation)
+    });
+    
+    Dimensions.addEventListener("change", this.onDimensionChange);
+    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
+    this.setOrientation();
 
-    const { canScore } = this.props;
-    if (!canScore) {
-      await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
-      await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
-    }
-    // AdMobInterstitial.addEventListener("interstitialDidLoad", () => console.log("interstitialDidLoad"));
-    // AdMobInterstitial.addEventListener("interstitialDidFailToLoad", () => console.log("interstitialDidFailToLoad"));
-    // AdMobInterstitial.addEventListener("interstitialDidOpen", () => console.log("interstitialDidOpen"));
-    // AdMobInterstitial.addEventListener("interstitialDidClose", () => console.log("interstitialDidClose"));
-    // AdMobInterstitial.addEventListener("interstitialWillLeaveApplication", () =>
-    //   console.log("interstitialWillLeaveApplication")
-    // );
-
+    // const { canScore } = this.props;
+    // if (!canScore) {
+    //   await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
+    //   await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
+    // }
 
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     this.props.fetchGameById({ gameUid });
@@ -90,15 +87,16 @@ class Scoreboard extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    //Dimensions.removeEventListener("change", this.onDimensionChange);
-
+    AdMobInterstitial.removeEventListener("interstitialDidClose");
+    
+    Dimensions.removeEventListener("change", this.onDimensionChange);
+    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);    
+    
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     firebase
       .database()
       .ref(`/games/${gameUid}`)
       .off();
-
-    //AdMobInterstitial.removeAllListeners();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -125,7 +123,8 @@ class Scoreboard extends React.PureComponent {
     await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
   }
 
-  setOrientation = window => {
+  setOrientation = () => {
+    const window = Dimensions.get('window');
     const { height, width } = window;
 
     if (height >= width) {
@@ -136,7 +135,7 @@ class Scoreboard extends React.PureComponent {
   };
 
   onDimensionChange = dimensions => {
-    this.setOrientation(dimensions.window);
+    this.setOrientation();
   };
 
   onDecrementScorePress = (isHome, score) => {
@@ -284,8 +283,15 @@ class Scoreboard extends React.PureComponent {
   renderSet = () => {
     const { currentSet } = this.props.game;
 
+    let setStyle = { fontSize: 20 };
+    if (this.state.orientation === "landscape") {
+      setStyle = {
+        fontSize: 32
+      };
+    }
+
     return (
-      <Text style={[human.bodyWhite, { textAlign: "center" }]}>
+      <Text style={[{ color: iOSColors.lightGray2, textAlign: "center" }, setStyle]}>
         {currentSet === "Final" ? currentSet : "Set " + currentSet}
       </Text>
     );
@@ -457,14 +463,23 @@ class Scoreboard extends React.PureComponent {
 
   renderScoreboard = game => {
     const { currentUser } = firebase.auth();
+    const { canScore } = this.props;
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
 
     let landscapeStyle = {};
+    let teamNameStyle = { fontSize: 24 };
+    let scoreStyle = { fontSize: 40 };
     if (this.state.orientation === "landscape") {
       landscapeStyle = {
         flex: 1,
-        justifyContent: "center",
-        alignContent: "center"
+      };
+
+      teamNameStyle = {
+        fontSize: 40
+      };
+
+      scoreStyle = {
+        fontSize: 72
       };
     }
 
@@ -492,15 +507,6 @@ class Scoreboard extends React.PureComponent {
     const leftScore = reversed ? awayTeamScore : homeTeamScore;
     const rightScore = reversed ? homeTeamScore : awayTeamScore;
 
-    //PUT THIS BACK AFTER WE FIGURE OUT HOW TO DROP THE SCRE IN FROM THE TOP
-    // const { scoreboardViewHeight } = this.state;
-    // const scoreboardHeight = scoreboardViewHeight > 0 ? scoreboardViewHeight : 300;
-    // const scoreBarOpacity = this.state.scrollY.interpolate({
-    //   inputRange: [0, scoreboardHeight - 3, scoreboardHeight - 2, scoreboardHeight - 1, scoreboardHeight],
-    //   outputRange: [0, 0, 0.85, 0.9, 0.95],
-    //   extrapolate: "clamp"
-    // });
-
     return (
       <View style={{ flex: 1 }}>
         <Animated.ScrollView
@@ -508,102 +514,86 @@ class Scoreboard extends React.PureComponent {
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="never"
           scrollEventThrottle={1}
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }], {
-            useNativeDriver: true
-          })}
         >
-          <View
-            style={[landscapeStyle]}
-            onLayout={e => {
-              this.setState({ scoreboardViewHeight: e.nativeEvent.layout.height });
-            }}
-          >
+          <View style={[landscapeStyle]}>
             {/* Team names / Swapper */}
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ flex: 1, justifyContent: "center" }}>
+            <View style={{ flexDirection: "row", marginBottom: 8 }}>
+              <View style={{ flex: 2 }}>
                 {this.renderWins("left")}
-                <AnimatedTeamName teamName={leftTeamName} />
+                <AnimatedTeamName teamName={leftTeamName} style={[{ color: iOSColors.lightGray2 }, teamNameStyle]} />
               </View>
-              <View style={{ flex: 1 }}>{this.renderSwapper()}</View>
-              <View style={{ flex: 1, justifyContent: "center" }}>
+              <View style={{ flex: 1 }}>
+                {this.renderSwapper()}
+              </View>
+              <View style={{ flex: 2 }}>
                 {this.renderWins("right")}
-                <AnimatedTeamName teamName={rightTeamName} />
+                <AnimatedTeamName teamName={rightTeamName} style={[{ color: iOSColors.lightGray2 }, teamNameStyle]} />
               </View>
             </View>
 
-            {/* Incrementers */}
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ flex: 1 }}>
-                {game.currentSet !== "Final" ? (
-                  this.renderIncrementor(() => this.onIncrementScorePress(!this.state.reversed, leftScore))
-                ) : (
-                    <View />
-                  )}
-              </View>
-              <View style={{ flex: 1 }}>{this.renderIncrementor(() => this.onIncrementSetPress())}</View>
-              <View style={{ flex: 1 }}>
-                {game.currentSet !== "Final" ? (
-                  this.renderIncrementor(() => this.onIncrementScorePress(this.state.reversed, rightScore))
-                ) : (
-                    <View />
-                  )}
-              </View>
-            </View>
+            <View style={styles.scoreContainer}>
+              {/* Incrementers */}
+              {canScore &&
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 2 }}>
+                    {game.currentSet !== "Final" ? (
+                      this.renderIncrementor(() => this.onIncrementScorePress(!this.state.reversed, leftScore))
+                    ) : (
+                        <View />
+                      )}
+                  </View>
+                  <View style={{ flex: 1 }}>{this.renderIncrementor(() => this.onIncrementSetPress())}</View>
+                  <View style={{ flex: 2 }}>
+                    {game.currentSet !== "Final" ? (
+                      this.renderIncrementor(() => this.onIncrementScorePress(this.state.reversed, rightScore))
+                    ) : (
+                        <View />
+                      )}
+                  </View>
+                </View>
+              }
 
-            {/* Scores / Set */}
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ flex: 1 }}>
-                <AnimatedScore score={leftScore} />
+              {/* Scores / Set */}
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ flex: 2 }}>
+                  <AnimatedScore score={leftScore} style={scoreStyle} />
+                </View>
+                <View style={{ flex: 1, justifyContent: "center" }}>{this.renderSet()}</View>
+                <View style={{ flex: 2 }}>
+                  <AnimatedScore score={rightScore} style={scoreStyle} />
+                </View>
               </View>
-              <View style={{ flex: 1, justifyContent: "center" }}>{this.renderSet()}</View>
-              <View style={{ flex: 1 }}>
-                <AnimatedScore score={rightScore} />
-              </View>
-            </View>
 
-            {/* Decrementers */}
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ flex: 1 }}>
-                {game.currentSet !== "Final" ? (
-                  this.renderDecrementor(() => this.onDecrementScorePress(!this.state.reversed, leftScore))
-                ) : (
-                    <View />
-                  )}
-              </View>
-              <View style={{ flex: 1 }}>{this.renderDecrementor(() => this.onDecrementSetPress())}</View>
-              <View style={{ flex: 1 }}>
-                {game.currentSet !== "Final" ? (
-                  this.renderDecrementor(() => this.onDecrementScorePress(this.state.reversed, rightScore))
-                ) : (
-                    <View />
-                  )}
-              </View>
+              {/* Decrementers */}
+              {canScore &&
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ flex: 2 }}>
+                    {game.currentSet !== "Final" ? (
+                      this.renderDecrementor(() => this.onDecrementScorePress(!this.state.reversed, leftScore))
+                    ) : (
+                        <View />
+                      )}
+                  </View>
+                  <View style={{ flex: 1 }}>{this.renderDecrementor(() => this.onDecrementSetPress())}</View>
+                  <View style={{ flex: 2 }}>
+                    {game.currentSet !== "Final" ? (
+                      this.renderDecrementor(() => this.onDecrementScorePress(this.state.reversed, rightScore))
+                    ) : (
+                        <View />
+                      )}
+                  </View>
+                </View>
+              }
             </View>
 
             {/* Set Scores */}
-            <SetScores game={game} reversed={reversed} />
+            {this.state.orientation === "portrait" &&
+              <SetScores game={game} reversed={reversed} />
+            }
           </View>
 
           {this.state.orientation === "portrait" && this.renderPosts()}
         </Animated.ScrollView>
-
-        {/* <Animated.View style={[styles.bar, { opacity: scoreBarOpacity }]}>
-          <View style={{ flexDirection: "row", justifyContent: "center" }}>
-            <View style={{ flex: 2 }}>
-              <Text numberOfLines={1} style={[human.bodyWhite, { textAlign: "center" }]}>
-                {leftTeamName}
-              </Text>
-              <Text style={[human.title2White, { textAlign: "center" }]}>{leftScore}</Text>
-            </View>
-            <View style={{ flex: 1, justifyContent: "center", alignContent: "center" }}>{this.renderSet()}</View>
-            <View style={{ flex: 2 }}>
-              <Text numberOfLines={1} style={[human.bodyWhite, { textAlign: "center" }]}>
-                {rightTeamName}
-              </Text>
-              <Text style={[human.title2White, { textAlign: "center" }]}>{rightScore}</Text>
-            </View>
-          </View>
-        </Animated.View> */}
 
         {this.state.orientation === "portrait" && currentUser && (
           <GamePostInput gameUid={gameUid} selectedPost={this.state.selectedPost} cancel={() => this.onPostInputCancel()} />
@@ -629,6 +619,8 @@ class Scoreboard extends React.PureComponent {
         )}
 
         {Platform.OS === "ios" ? <KeyboardSpacer topSpacing={-50} /> : null}
+
+
       </View>
     );
   };
@@ -686,6 +678,15 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0
+  },
+  scoreContainer: {
+    backgroundColor: Colors.primaryDarkColor, 
+    borderColor: iOSColors.white, 
+    borderWidth: 2, 
+    borderRadius: 8, 
+    marginLeft: 10, 
+    marginRight: 10,
+    padding: 8
   }
 });
 

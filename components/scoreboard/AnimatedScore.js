@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, Easing } from "react-native";
+import { Animated, Easing, View } from "react-native";
 import Colors from "../../constants/Colors";
 import { human, iOSColors } from "react-native-typography";
 
@@ -31,7 +31,7 @@ export default class AnimatedScore extends React.Component {
   }
 
   render() {
-    const { score } = this.props;
+    const { score, style } = this.props;
 
     const textFlip = this.state.flipAnimatedValue.interpolate({
       inputRange: [0, 90, 360],
@@ -51,13 +51,13 @@ export default class AnimatedScore extends React.Component {
     return (
       <Animated.Text
         style={[
-          human.largeTitle,
           {
-            color: iOSColors.white,//colorShift,
+            color: iOSColors.white,
             backfaceVisibility: "hidden",
             textAlign: "center",
             //transform: [{ rotateY: textFlip }, { perspective: 1000 }]
-          }
+          },
+          style
         ]}
       >
         {score}
