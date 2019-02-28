@@ -20,8 +20,8 @@ export default class SetScores extends React.Component {
       const backgroundColor = i === _currentSet ? Colors.primaryLightColor : Colors.primaryColor;
 
       return (
-        <View key={i} style={{ justifyContent: "center", alignItems: "center", marginLeft: 2 }}>
-          <Text style={[material.body1White, { textAlign: "center", marginBottom: 5 }]}>Set {i}</Text>
+        <View key={i} style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text style={[material.body1White, { textAlign: "center", marginBottom: 4 }]}>Set {i}</Text>
           <View
             style={[
               {
@@ -46,16 +46,12 @@ export default class SetScores extends React.Component {
   }
 
   render() {
-    return <View style={{
-      flex: 1, 
+    const { style } = this.props;
+
+    return <View style={[{
       flexDirection: "row",
-      justifyContent: "center",
-      marginTop: 8, 
-      marginBottom: 16, 
-      //borderTopColor: iOSColors.midGray, 
-      //borderTopWidth: 2, 
-      paddingTop: 8
-    }}>{this.renderSets()}</View>;
+      justifyContent: "center"
+    }, style]}>{this.renderSets()}</View>;
   }
 }
 

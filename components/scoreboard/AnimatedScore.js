@@ -49,19 +49,29 @@ export default class AnimatedScore extends React.Component {
     });
 
     return (
-      <Animated.Text
-        style={[
-          {
-            color: iOSColors.white,
-            backfaceVisibility: "hidden",
-            textAlign: "center",
-            //transform: [{ rotateY: textFlip }, { perspective: 1000 }]
-          },
-          style
-        ]}
-      >
-        {score}
-      </Animated.Text>
+      <View style={{
+        backgroundColor: Colors.primaryDarkColor,
+        borderColor: iOSColors.white,
+        borderWidth: 2,
+        borderRadius: 8,
+        margin: 4,
+        paddingBottom: 8,
+        paddingTop: 8
+      }}>
+        <Animated.Text
+          style={[
+            {
+              color: iOSColors.white,
+              backfaceVisibility: "hidden",
+              textAlign: "center",
+              //transform: [{ rotateY: textFlip }, { perspective: 1000 }]
+            },
+            style
+          ]}
+        >
+          {score}
+        </Animated.Text>
+      </View>
     );
   }
 }

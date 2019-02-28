@@ -70,7 +70,7 @@ class Scoreboard extends React.PureComponent {
       console.log("interstitialDidClose")
       console.log(this.state.orientation)
     });
-    
+
     Dimensions.addEventListener("change", this.onDimensionChange);
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
     this.setOrientation();
@@ -88,10 +88,10 @@ class Scoreboard extends React.PureComponent {
 
   componentWillUnmount() {
     AdMobInterstitial.removeEventListener("interstitialDidClose");
-    
+
     Dimensions.removeEventListener("change", this.onDimensionChange);
-    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);    
-    
+    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
     firebase
       .database()
@@ -466,21 +466,11 @@ class Scoreboard extends React.PureComponent {
     const { canScore } = this.props;
     const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
 
-    let landscapeStyle = {};
     let teamNameStyle = { fontSize: 24 };
     let scoreStyle = { fontSize: 40 };
     if (this.state.orientation === "landscape") {
-      landscapeStyle = {
-        flex: 1,
-      };
-
-      teamNameStyle = {
-        fontSize: 40
-      };
-
-      scoreStyle = {
-        fontSize: 72
-      };
+      teamNameStyle = { fontSize: 40 };
+      scoreStyle = { fontSize: 88 };
     }
 
     const { reversed } = this.state;
@@ -515,84 +505,82 @@ class Scoreboard extends React.PureComponent {
           keyboardShouldPersistTaps="never"
           scrollEventThrottle={1}
         >
-          <View style={[landscapeStyle]}>
-            {/* Team names / Swapper */}
-            <View style={{ flexDirection: "row", marginBottom: 8 }}>
-              <View style={{ flex: 2 }}>
-                {this.renderWins("left")}
-                <AnimatedTeamName teamName={leftTeamName} style={[{ color: iOSColors.lightGray2 }, teamNameStyle]} />
-              </View>
-              <View style={{ flex: 1 }}>
-                {this.renderSwapper()}
-              </View>
-              <View style={{ flex: 2 }}>
-                {this.renderWins("right")}
-                <AnimatedTeamName teamName={rightTeamName} style={[{ color: iOSColors.lightGray2 }, teamNameStyle]} />
-              </View>
+          {/* Team names / Swapper */}
+          <View style={{ flexDirection: "row", marginBottom: 8 }}>
+            <View style={{ flex: 2 }}>
+              {this.renderWins("left")}
+              <AnimatedTeamName teamName={leftTeamName} style={[{ color: iOSColors.lightGray2 }, teamNameStyle]} />
             </View>
-
-            <View style={styles.scoreContainer}>
-              {/* Incrementers */}
-              {canScore &&
-                <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 2 }}>
-                    {game.currentSet !== "Final" ? (
-                      this.renderIncrementor(() => this.onIncrementScorePress(!this.state.reversed, leftScore))
-                    ) : (
-                        <View />
-                      )}
-                  </View>
-                  <View style={{ flex: 1 }}>{this.renderIncrementor(() => this.onIncrementSetPress())}</View>
-                  <View style={{ flex: 2 }}>
-                    {game.currentSet !== "Final" ? (
-                      this.renderIncrementor(() => this.onIncrementScorePress(this.state.reversed, rightScore))
-                    ) : (
-                        <View />
-                      )}
-                  </View>
-                </View>
-              }
-
-              {/* Scores / Set */}
-              <View style={{ flexDirection: "row" }}>
-                <View style={{ flex: 2 }}>
-                  <AnimatedScore score={leftScore} style={scoreStyle} />
-                </View>
-                <View style={{ flex: 1, justifyContent: "center" }}>{this.renderSet()}</View>
-                <View style={{ flex: 2 }}>
-                  <AnimatedScore score={rightScore} style={scoreStyle} />
-                </View>
-              </View>
-
-              {/* Decrementers */}
-              {canScore &&
-                <View style={{ flexDirection: "row" }}>
-                  <View style={{ flex: 2 }}>
-                    {game.currentSet !== "Final" ? (
-                      this.renderDecrementor(() => this.onDecrementScorePress(!this.state.reversed, leftScore))
-                    ) : (
-                        <View />
-                      )}
-                  </View>
-                  <View style={{ flex: 1 }}>{this.renderDecrementor(() => this.onDecrementSetPress())}</View>
-                  <View style={{ flex: 2 }}>
-                    {game.currentSet !== "Final" ? (
-                      this.renderDecrementor(() => this.onDecrementScorePress(this.state.reversed, rightScore))
-                    ) : (
-                        <View />
-                      )}
-                  </View>
-                </View>
-              }
+            <View style={{ flex: 1 }}>
+              {this.renderSwapper()}
             </View>
-
-            {/* Set Scores */}
-            {this.state.orientation === "portrait" &&
-              <SetScores game={game} reversed={reversed} />
-            }
+            <View style={{ flex: 2 }}>
+              {this.renderWins("right")}
+              <AnimatedTeamName teamName={rightTeamName} style={[{ color: iOSColors.lightGray2 }, teamNameStyle]} />
+            </View>
           </View>
 
-          {this.state.orientation === "portrait" && this.renderPosts()}
+          {/* Incrementers */}
+          {canScore &&
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ flex: 2 }}>
+                {game.currentSet !== "Final" ? (
+                  this.renderIncrementor(() => this.onIncrementScorePress(!this.state.reversed, leftScore))
+                ) : (
+                    <View />
+                  )}
+              </View>
+              <View style={{ flex: 1 }}>{this.renderIncrementor(() => this.onIncrementSetPress())}</View>
+              <View style={{ flex: 2 }}>
+                {game.currentSet !== "Final" ? (
+                  this.renderIncrementor(() => this.onIncrementScorePress(this.state.reversed, rightScore))
+                ) : (
+                    <View />
+                  )}
+              </View>
+            </View>
+          }
+
+          {/* Scores / Set */}
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 2, marginLeft: 8, marginRight: 8 }}>
+              <AnimatedScore score={leftScore} style={scoreStyle} />
+            </View>
+            <View style={{ flex: 1, justifyContent: "center" }}>{this.renderSet()}</View>
+            <View style={{ flex: 2, marginLeft: 8, marginRight: 8 }}>
+              <AnimatedScore score={rightScore} style={scoreStyle} />
+            </View>
+          </View>
+
+          {/* Decrementers */}
+          {canScore &&
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ flex: 2 }}>
+                {game.currentSet !== "Final" ? (
+                  this.renderDecrementor(() => this.onDecrementScorePress(!this.state.reversed, leftScore))
+                ) : (
+                    <View />
+                  )}
+              </View>
+              <View style={{ flex: 1 }}>{this.renderDecrementor(() => this.onDecrementSetPress())}</View>
+              <View style={{ flex: 2 }}>
+                {game.currentSet !== "Final" ? (
+                  this.renderDecrementor(() => this.onDecrementScorePress(this.state.reversed, rightScore))
+                ) : (
+                    <View />
+                  )}
+              </View>
+            </View>
+          }
+
+          {/* Set Scores */}
+          {this.state.orientation === "portrait" &&
+            <SetScores game={game} reversed={reversed} style={{ marginBottom: 16, marginTop: 16 }} />
+          }
+
+          <View style={{ flex: 1 }}>
+            {this.state.orientation === "portrait" && this.renderPosts()}
+          </View>
         </Animated.ScrollView>
 
         {this.state.orientation === "portrait" && currentUser && (
@@ -619,7 +607,6 @@ class Scoreboard extends React.PureComponent {
         )}
 
         {Platform.OS === "ios" ? <KeyboardSpacer topSpacing={-50} /> : null}
-
 
       </View>
     );
@@ -678,15 +665,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0
-  },
-  scoreContainer: {
-    backgroundColor: Colors.primaryDarkColor, 
-    borderColor: iOSColors.white, 
-    borderWidth: 2, 
-    borderRadius: 8, 
-    marginLeft: 10, 
-    marginRight: 10,
-    padding: 8
   }
 });
 
