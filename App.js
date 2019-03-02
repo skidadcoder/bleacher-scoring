@@ -64,7 +64,8 @@ export default class App extends React.Component {
         require("./assets/images/scoring-walkthrough-end.png"),
         require("./assets/images/scoring-walkthrough-pin.png"),
         require("./assets/images/scoring-walkthrough-score.png"),
-        require("./assets/images/scoring-walkthrough-swap.png")
+        require("./assets/images/scoring-walkthrough-swap.png"),
+        require("./assets/sounds/whistle-short.mp3")
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar

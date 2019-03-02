@@ -16,7 +16,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { AdMobInterstitial, Constants, KeepAwake, ScreenOrientation } from "expo";
+import { AdMobInterstitial, Audio, Constants, KeepAwake, ScreenOrientation } from "expo";
 import { connect } from "react-redux";
 import { withNavigation } from "react-navigation";
 import {
@@ -102,8 +102,8 @@ class Scoreboard extends React.PureComponent {
       .off();
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { gamePostPersistSucceeded, gamePostsFetchSucceeded, game } = nextProps;
+  async componentWillReceiveProps(nextProps) {
+    const { gamePostPersistSucceeded, gamePostsFetchSucceeded, game, canScore } = nextProps;
 
     if (gamePostsFetchSucceeded) {
       this.setState({ loadingPosts: false });
@@ -118,6 +118,16 @@ class Scoreboard extends React.PureComponent {
 
     if (game.currentSet > this.props.game.currentSet) {
       this.showInterstitial();
+    }
+
+    if (!canScore) {
+      const soundObject = new Audio.Sound();
+      try {
+        await soundObject.loadAsync(require("../../assets/sounds/whistle-short.mp3"));
+        await soundObject.playAsync();
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
