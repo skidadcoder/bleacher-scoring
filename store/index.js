@@ -9,7 +9,7 @@ const persistConfig = {
   key: "root",
   storage: AsyncStorage,
   //stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  whitelist: ["savedGames"]
+  whitelist: ["savedGames", "savedScorekeepers"]
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

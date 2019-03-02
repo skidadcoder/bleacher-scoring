@@ -1,7 +1,7 @@
 import _ from "lodash";
 import moment from "moment";
 import React from "react";
-import { StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import { AdMobInterstitial, Icon } from "expo";
 import { human, iOSColors } from "react-native-typography";
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -50,14 +50,43 @@ export default class GameList extends React.PureComponent {
   };
 
   onFavoritePress = (rowMap, item) => e => {
-    this.closeRow(rowMap, item.gameUid);
-    this.props.onGameFavoritePress(item);
-    this.showInterstitial();
+    Alert.alert(
+      "What do you want to favorite?",
+      `Selecting SCOREKEEPER will add all current and future games scored by ${item.displayName} to your favorites.`,
+      [
+        {
+          text: "SCOREKEEPER",
+          onPress: () => {
+            this.closeRow(rowMap, item.gameUid);
+            this.props.onScorekeeperFavoritePress(item);
+          }
+        },
+        {
+          text: "GAME",
+          onPress: () => {
+            this.closeRow(rowMap, item.gameUid);
+            this.props.onGameFavoritePress(item);
+          }
+        },
+        {
+          text: "CANCEL",
+          onPress: () => {
+            this.closeRow(rowMap, item.gameUid);
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+
+    // this.closeRow(rowMap, item.gameUid);
+    // this.props.onGameFavoritePress(item);
+    //this.showInterstitial();
   };
 
   onUnfavoritePress = (rowMap, item) => e => {
     this.closeRow(rowMap, item.gameUid);
     this.props.onGameUnfavoritePress(item);
+    this.props.onScorekeeperUnfavoritePress(item);
   };
 
   onRowDidOpen = (rowKey, rowMap) => {
@@ -84,13 +113,20 @@ export default class GameList extends React.PureComponent {
   };
 
   isSavedGame = item => {
-    const { savedGames } = this.props;
-
-    var foundGame = _.find(savedGames, function (o) {
+    const { savedGames, savedScorekeepers } = this.props;
+    const foundGame = _.find(savedGames, function (o) {
       return o.gameUid === item.gameUid;
     });
 
     if (foundGame) {
+      return true;
+    }
+
+    const foundScorekeeper = _.find(savedScorekeepers, function (o){
+      return o.userId === item.userId;
+    })
+
+    if (foundScorekeeper){
       return true;
     }
 

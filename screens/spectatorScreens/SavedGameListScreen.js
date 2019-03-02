@@ -4,7 +4,7 @@ import React from "react";
 import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import { AdMobBanner } from "expo";
-import { saveGame, selectGame, unSaveGame, fetchFavoriteGames } from "../../actions/gameActions";
+import { fetchFavoriteGames, fetchFavoriteScorekeeperGames, saveGame, saveScorekeeper, selectGame, unSaveScorekeeper, unSaveGame } from "../../actions/gameActions";
 import { MaterialIcons } from "@expo/vector-icons";
 import { human, iOSColors } from "react-native-typography";
 import HeaderBar from "../../components/HeaderBar";
@@ -22,16 +22,21 @@ class SavedGameListScreen extends React.Component {
     this.navListeners = [this.props.navigation.addListener("willFocus", this.componentWillFocus)];
 
     const gameUids = this.props.savedGames.map(g => g.gameUid);
-    this.props.fetchFavoriteGames(gameUids);
+    const uniqGameUids = _.uniq(gameUids);
+    this.props.fetchFavoriteGames(uniqGameUids);
+
+    const scorekeeperIds = this.props.savedScorekeepers.map(s => s.userId);
+    const uniqScorekeeperIds = _.uniq(scorekeeperIds);
+    this.props.fetchFavoriteScorekeeperGames(uniqScorekeeperIds);
   }
 
   componentWillFocus = () => {
-    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);
   };
 
   componentWillUnmount() {
     this.navListeners.forEach(navListener => navListener.remove());
-    
+
     firebase
       .database()
       .ref(`/games`)
@@ -41,7 +46,14 @@ class SavedGameListScreen extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.savedGames.length !== nextProps.savedGames.length) {
       const gameUids = nextProps.savedGames.map(g => g.gameUid);
-      this.props.fetchFavoriteGames(gameUids);
+      const uniqGameUids = _.uniq(gameUids);
+      this.props.fetchFavoriteGames(uniqGameUids);
+    }
+
+    if (this.props.savedScorekeepers.length !== nextProps.savedScorekeepers.length) {
+      const scorekeeperIds = nextProps.savedScorekeepers.map(s => s.userId);
+      const uniqScorekeeperIds = _.uniq(scorekeeperIds);
+      this.props.fetchFavoriteScorekeeperGames(uniqScorekeeperIds);
     }
   }
 
@@ -59,10 +71,21 @@ class SavedGameListScreen extends React.Component {
     this.props.unSaveGame({ gameUid });
   };
 
-  renderList = () => {
-    const { games, favoriteGamesFetchStarted } = this.props;
+  onScorekeeperFavoritePress = game => {
+    const { userId, displayName } = game;
+    const scorekeeper = { userId: userId, displayName: displayName };
+    this.props.saveScorekeeper({ scorekeeper });
+  }
 
-    if (favoriteGamesFetchStarted) {
+  onScorekeeperUnfavoritePress = game => {
+    const { userId } = game;
+    this.props.unSaveScorekeeper({ userId });
+  }
+
+  renderList = () => {
+    const { games, favoriteGamesFetchStarted, favoriteScorekeeperGamesFetchStarted } = this.props;
+
+    if (favoriteGamesFetchStarted || favoriteScorekeeperGamesFetchStarted) {
       return (
         <View
           style={{
@@ -77,7 +100,7 @@ class SavedGameListScreen extends React.Component {
       );
     }
 
-    if (!favoriteGamesFetchStarted && games.length === 0) {
+    if (!favoriteGamesFetchStarted && !favoriteScorekeeperGamesFetchStarted && games.length === 0) {
       return (
         <View
           style={{
@@ -93,14 +116,17 @@ class SavedGameListScreen extends React.Component {
       );
     }
 
-    if (!favoriteGamesFetchStarted && games.length > 0) {
+    if (!favoriteGamesFetchStarted && !favoriteScorekeeperGamesFetchStarted && games.length > 0) {
       return (
         <GameList
           data={games}
           savedGames={this.props.savedGames}
+          savedScorekeepers={this.props.savedScorekeepers}
           onGamePress={this.onGamePress}
           onGameFavoritePress={this.onGameFavoritePress}
           onGameUnfavoritePress={this.onGameUnfavoritePress}
+          onScorekeeperFavoritePress={this.onScorekeeperFavoritePress}
+          onScorekeeperUnfavoritePress={this.onScorekeeperUnfavoritePress}
         />
       );
     }
@@ -153,21 +179,27 @@ class SavedGameListScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { savedGames, favoriteGames } = state;
-  const { data, favoriteGamesFetchStarted } = favoriteGames;
-  const games = _.sortBy(
-    _.map(data, (val, uid) => {
-      return { ...val, gameUid: uid };
-    }),
-    function (dateObj) {
-      return new Date(dateObj.lastUpdate);
-    }
-  ).reverse();
+  const { favoriteGames, favoriteScorekeeperGames, savedGames, savedScorekeepers } = state;
+  const { favoriteGamesFetchStarted } = favoriteGames;
+  const { favoriteScorekeeperGamesFetchStarted } = favoriteScorekeeperGames;
 
-  return { savedGames, games, favoriteGamesFetchStarted };
+  const _favoriteGames = _.map(favoriteGames.data, (val, uid) => {
+    return { ...val, gameUid: uid };
+  });
+
+  const _favoriteScorekeeperGames = _.map(favoriteScorekeeperGames.data, (val, uid) => {
+    return { ...val, gameUid: uid };
+  });
+
+  const _games = [..._favoriteGames, ..._favoriteScorekeeperGames];
+  const games = _.sortBy(_.uniqBy(_games, "gameUid"), function (dateObj) {
+    return new Date(dateObj.lastUpdate);
+  }).reverse();
+
+  return { savedGames, savedScorekeepers, games, favoriteGamesFetchStarted, favoriteScorekeeperGamesFetchStarted };
 };
 
 export default connect(
   mapStateToProps,
-  { saveGame, selectGame, unSaveGame, fetchFavoriteGames }
+  { saveScorekeeper, saveGame, selectGame, unSaveScorekeeper, unSaveGame, fetchFavoriteGames, fetchFavoriteScorekeeperGames }
 )(SavedGameListScreen);

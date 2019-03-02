@@ -5,7 +5,9 @@ import gameFormReducer from "./gameFormReducer";
 import gameScoreReducer from "./gameScoreReducer";
 import userGamesReducer from "./userGamesReducer";
 import savedGamesReducer from "./savedGamesReducer";
-import favoriteGamesReducer from "./favoriteGamesReducer"
+import savedScorekeepersReducer from "./savedScorekeepersReducer";
+import favoriteGamesReducer from "./favoriteGamesReducer";
+import favoriteScorekeeperGamesReducer from "./favoriteScorekeeperGamesReducer";
 import nearbyGamesReducer from "./nearbyGamesReducer";
 import selectedGameReducer from "./selectedGameReducer";
 import gameSearchResultsReducer from "./gameSearchResultsReducer";
@@ -32,8 +34,10 @@ const rootReducer = combineReducers({
   selectedGame: selectedGameReducer,
   userGames: userGamesReducer,
   savedGames: savedGamesReducer,
+  savedScorekeepers: savedScorekeepersReducer,
   nearbyGames: nearbyGamesReducer,
   favoriteGames: favoriteGamesReducer,
+  favoriteScorekeeperGames: favoriteScorekeeperGamesReducer,
   game: gameReducer,
   updateDisplayNameForm: updateDisplayNameFormReducer,
   updateEmailAddressForm: updateEmailAddressFormReducer

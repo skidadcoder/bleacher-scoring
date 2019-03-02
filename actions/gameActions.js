@@ -3,10 +3,10 @@ import moment from "moment";
 import firebase from "firebase";
 import g from "ngeohash";
 import {
-  FAVORITE_GAME_FETCH_SUCCESS,
-  FAVORITE_GAME_FETCH_FAIL,
   FAVORITE_GAMES_FETCH_START,
   FAVORITE_GAMES_FETCH_SUCCESS,
+  FAVORITE_SCOREKEEPER_GAMES_FETCH_START,
+  FAVORITE_SCOREKEEPER_GAMES_FETCH_SUCCESS,
   USER_GAMES_CLEAR,
   USER_GAMES_FETCH_START,
   USER_GAMES_FETCH_SUCCESS,
@@ -39,7 +39,9 @@ import {
   GAME_SET_PERSIST_SUCCESS,
   GAME_SET_PERSIST_FAIL,
   ADD_SAVED_GAME,
-  REMOVE_SAVED_GAME
+  REMOVE_SAVED_GAME,
+  ADD_SAVED_SCOREKEEPER,
+  REMOVE_SAVED_SCOREKEEPER
 } from "../reducers/types";
 
 export const gamePropChange = ({ prop, value }) => {
@@ -427,6 +429,35 @@ export const fetchFavoriteGames = gameUids => {
   };
 };
 
+export const fetchFavoriteScorekeeperGames = scorekeeperIds => {
+  const db = firebase.database().ref("/games");
+
+  return dispatch => {
+    dispatch({ type: FAVORITE_SCOREKEEPER_GAMES_FETCH_START });
+
+    if (scorekeeperIds.length === 0) {
+      dispatch({ type: FAVORITE_SCOREKEEPER_GAMES_FETCH_SUCCESS, payload: [] });
+    } else {
+      Promise.all(
+        scorekeeperIds.map(scorekeeperId => {
+          return db
+            .orderByChild("userId")
+            .equalTo(scorekeeperId)
+            .on(
+              "value",
+              snapshot => {
+                dispatch({ type: FAVORITE_SCOREKEEPER_GAMES_FETCH_SUCCESS, payload: snapshot.val() });
+              },
+              error => {
+                console.error(error);
+              }
+            );
+        })
+      );
+    }
+  };
+};
+
 export const fetchGameById = ({ gameUid }) => {
   return dispatch => {
     dispatch({ type: GAME_FETCH_START });
@@ -493,6 +524,20 @@ export const unSaveGame = ({ gameUid }) => {
     payload: gameUid
   };
 };
+
+export const saveScorekeeper = ({ scorekeeper }) => {
+  return {
+    type: ADD_SAVED_SCOREKEEPER,
+    payload: scorekeeper
+  }
+}
+
+export const unSaveScorekeeper = ({ userId }) => {
+  return {
+    type: REMOVE_SAVED_SCOREKEEPER,
+    payload: userId
+  }
+}
 
 const sleep = milliseconds => {
   return new Promise(resolve => setTimeout(resolve, milliseconds));

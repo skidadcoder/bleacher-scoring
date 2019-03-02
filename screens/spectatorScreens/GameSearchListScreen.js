@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { AdMobBanner } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { fetchNearbyGames, saveGame, selectGame, unSaveGame } from "../../actions/gameActions";
+import { fetchNearbyGames, saveGame, saveScorekeeper, selectGame, unSaveScorekeeper, unSaveGame } from "../../actions/gameActions";
 import { human, iOSColors } from "react-native-typography";
 import HeaderBar from "../../components/HeaderBar";
 import GameList from "../../components/scoreboard/GameList";
@@ -27,11 +27,11 @@ class GameSearchListScreen extends React.Component {
   }
 
   componentWillFocus = () => {
-    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);
   };
 
   componentWillUnmount() {
-    this.navListeners.forEach(navListener => navListener.remove());    
+    this.navListeners.forEach(navListener => navListener.remove());
   }
 
   onClearPress = () => {
@@ -66,6 +66,17 @@ class GameSearchListScreen extends React.Component {
     const { gameUid } = game;
     this.props.unSaveGame({ gameUid });
   };
+
+  onScorekeeperFavoritePress = game => {
+    const { userId, displayName } = game;
+    const scorekeeper = { userId: userId, displayName: displayName };
+    this.props.saveScorekeeper({ scorekeeper });
+  }
+
+  onScorekeeperUnfavoritePress = game => {
+    const { userId } = game;
+    this.props.unSaveScorekeeper({ userId });
+  }
 
   renderGooglePlacesInput = () => {
     return (
@@ -143,9 +154,12 @@ class GameSearchListScreen extends React.Component {
         <GameList
           data={games}
           savedGames={this.props.savedGames}
+          savedScorekeepers={this.props.savedScorekeepers}
           onGamePress={this.onGamePress}
           onGameFavoritePress={this.onGameFavoritePress}
           onGameUnfavoritePress={this.onGameUnfavoritePress}
+          onScorekeeperFavoritePress={this.onScorekeeperFavoritePress}
+          onScorekeeperUnfavoritePress={this.onScorekeeperUnfavoritePress}
         />
       );
     }
@@ -203,7 +217,7 @@ class GameSearchListScreen extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { savedGames } = state;
+  const { savedGames, savedScorekeepers } = state;
   const { data, nearbyGameFetchStarted } = state.nearbyGames;
   const games = _.sortBy(
     _.map(data, (val, uid) => {
@@ -214,12 +228,12 @@ const mapStateToProps = state => {
     }
   ).reverse();
 
-  return { savedGames, games, nearbyGameFetchStarted };
+  return { savedGames, savedScorekeepers, games, nearbyGameFetchStarted };
 };
 
 export default connect(
   mapStateToProps,
-  { fetchNearbyGames, saveGame, selectGame, unSaveGame }
+  { fetchNearbyGames, saveScorekeeper, saveGame, selectGame, unSaveScorekeeper, unSaveGame }
 )(GameSearchListScreen);
 
 const styles = StyleSheet.create({
