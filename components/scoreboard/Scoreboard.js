@@ -3,6 +3,7 @@ import firebase from "firebase";
 import React from "react";
 import {
   ActivityIndicator,
+  Alert,
   Animated,
   Dimensions,
   FlatList,
@@ -25,11 +26,13 @@ import {
   fetchGameById,
   fetchGamePostsById,
   saveGame,
+  saveScorekeeper,
   updateGameScore,
   updateGameLocation,
   updateCurrentSet,
   unfetchGameById,
-  unSaveGame
+  unSaveGame,
+  unSaveScorekeeper
 } from "../../actions/gameActions";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { human, iOSColors } from "react-native-typography";
@@ -81,7 +84,7 @@ class Scoreboard extends React.PureComponent {
     //   await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
     // }
 
-    const {gameUid} = this.props;
+    const { gameUid } = this.props;
     this.props.fetchGameById({ gameUid });
     this.props.fetchGamePostsById({ gameUid });
   }
@@ -92,7 +95,7 @@ class Scoreboard extends React.PureComponent {
     Dimensions.removeEventListener("change", this.onDimensionChange);
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
 
-    const {gameUid} = this.props;
+    const { gameUid } = this.props;
     firebase
       .database()
       .ref(`/games/${gameUid}`)
@@ -247,24 +250,50 @@ class Scoreboard extends React.PureComponent {
 
   onFavoriteGamePress = () => {
     const { gameUid } = this.props;
-    const { venueName, awayTeamName, homeTeamName, gameDate } = this.props.game;
+    const { venueName, awayTeamName, homeTeamName, gameDate, userId, displayName } = this.props.game;
     const game = {
       gameUid,
       venueName,
       awayTeamName,
       homeTeamName,
-      gameDate
+      gameDate,
+      userId,
+      displayName
     };
 
-    this.props.saveGame({ game });
-
-    this.showInterstitial();
+    Alert.alert(
+      "What do you want to favorite?",
+      `Selecting SCOREKEEPER will add all current and future games scored by ${game.displayName} to your favorites.`,
+      [
+        {
+          text: "SCOREKEEPER",
+          onPress: () => {
+            const { userId, displayName } = game;
+            const scorekeeper = { userId: userId, displayName: displayName };
+            this.props.saveScorekeeper({ scorekeeper });
+          }
+        },
+        {
+          text: "GAME",
+          onPress: () => {
+            this.props.saveGame({ game });
+          }
+        },
+        {
+          text: "CANCEL",
+          onPress: () => {
+          }
+        }
+      ],
+      { cancelable: false }
+    );
   };
 
   onUnfavoriteGamePress = navToFavs => {
-    const { gameUid } = this.props;
+    const { gameUid, userId } = this.props;
 
     this.props.unSaveGame({ gameUid });
+    this.props.unSaveScorekeeper({ userId });
 
     if (navToFavs) {
       this.props.navigation.navigate("SavedGameList");
@@ -689,11 +718,21 @@ const mapStateToProps = state => {
   ).reverse();
 
   //check if this is a saved game
-  var savedGame = _.find(state.savedGames, function (g) {
-    return g.gameUid === gameUid;
-  });
   let isSavedGame = false;
-  if (savedGame) {
+  const { savedGames, savedScorekeepers } = state;
+  const foundGame = _.find(savedGames, function (o) {
+    return o.gameUid === gameUid;
+  });
+
+  if (foundGame) {
+    isSavedGame = true;
+  }
+
+  const foundScorekeeper = _.find(savedScorekeepers, function (o) {
+    return o.userId === game.userId;
+  })
+
+  if (foundScorekeeper) {
     isSavedGame = true;
   }
 
@@ -717,11 +756,13 @@ export default withNavigation(
       fetchGameById,
       fetchGamePostsById,
       saveGame,
+      saveScorekeeper,
       updateGameScore,
       updateGameLocation,
       updateCurrentSet,
       unfetchGameById,
-      unSaveGame
+      unSaveGame,
+      unSaveScorekeeper
     }
   )(Scoreboard)
 );
