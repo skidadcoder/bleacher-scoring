@@ -2,10 +2,12 @@ import _ from "lodash";
 import React from "react";
 import { Dimensions, ImageBackground, StatusBar, StyleSheet, View } from "react-native";
 import { Linking } from "expo";
+import { connect } from "react-redux";
+import { selectGame } from "../actions/gameActions";
 import MenuItem from "../components/MenuItem";
 import GlobalStyles from "./styles";
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -30,11 +32,11 @@ export default class HomeScreen extends React.Component {
   }
 
   componentWillFocus = () => {
-    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);
   };
 
   componentWillUnmount() {
-    this.navListeners.forEach(navListener => navListener.remove());    
+    this.navListeners.forEach(navListener => navListener.remove());
     Linking.removeEventListener("url", this.handleOpenURL);
   }
 
@@ -44,8 +46,13 @@ export default class HomeScreen extends React.Component {
 
   navigate = url => {
     const { queryParams } = Expo.Linking.parse(url);
+
     if (!_.isEmpty(queryParams)) {
-      this.props.navigation.navigate("Scoreboard", queryParams);
+      if (queryParams.game) {
+        const game = { gameUid: queryParams.game };
+        this.props.selectGame({ game });
+        this.props.navigation.navigate("Scoreboard");
+      }
     }
   };
 
@@ -83,6 +90,15 @@ export default class HomeScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  { selectGame }
+)(HomeScreen);
 
 const styles = StyleSheet.create({
   menuButtonRow: {

@@ -66,10 +66,10 @@ class Scoreboard extends React.PureComponent {
   async componentDidMount() {
     AdMobInterstitial.setAdUnitID(getEnvVars.adMobUnitIDScoreboardInterstitial);
     AdMobInterstitial.setTestDeviceID("EMULATOR");
-    AdMobInterstitial.addEventListener("interstitialDidClose", () => {
-      console.log("interstitialDidClose")
-      console.log(this.state.orientation)
-    });
+    //AdMobInterstitial.addEventListener("interstitialDidClose", () => {
+    //  console.log("interstitialDidClose")
+    //  console.log(this.state.orientation)
+    //});
 
     Dimensions.addEventListener("change", this.onDimensionChange);
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.ALL);
@@ -81,18 +81,18 @@ class Scoreboard extends React.PureComponent {
     //   await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
     // }
 
-    const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
+    const {gameUid} = this.props;
     this.props.fetchGameById({ gameUid });
     this.props.fetchGamePostsById({ gameUid });
   }
 
   componentWillUnmount() {
-    AdMobInterstitial.removeEventListener("interstitialDidClose");
+    //AdMobInterstitial.removeEventListener("interstitialDidClose");
 
     Dimensions.removeEventListener("change", this.onDimensionChange);
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
 
-    const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
+    const {gameUid} = this.props;
     firebase
       .database()
       .ref(`/games/${gameUid}`)
@@ -119,8 +119,12 @@ class Scoreboard extends React.PureComponent {
   }
 
   showInterstitial = async () => {
-    await AdMobInterstitial.requestAdAsync().catch(error => console.log(error));
-    await AdMobInterstitial.showAdAsync().catch(error => console.log(error));
+    await AdMobInterstitial.requestAdAsync().catch(error => {
+      console.log(error)
+    });
+    await AdMobInterstitial.showAdAsync().catch(error => {
+      console.log(error)
+    });
   }
 
   setOrientation = () => {
@@ -463,8 +467,7 @@ class Scoreboard extends React.PureComponent {
 
   renderScoreboard = game => {
     const { currentUser } = firebase.auth();
-    const { canScore } = this.props;
-    const gameUid = this.props.gameUid || this.props.navigation.getParam("game");
+    const { canScore, gameUid } = this.props;
 
     let teamNameStyle = { fontSize: 24 };
     let scoreStyle = { fontSize: 40 };
