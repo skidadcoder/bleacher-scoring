@@ -1,4 +1,5 @@
 import _ from "lodash";
+import firebase from "firebase";
 import React from "react";
 import {
   CameraRoll,
