@@ -87,6 +87,15 @@ class Scoreboard extends React.PureComponent {
     const { gameUid } = this.props;
     this.props.fetchGameById({ gameUid });
     this.props.fetchGamePostsById({ gameUid });
+
+    //set up sounds
+    this.shortWhistle = new Audio.Sound();
+    try {
+      await this.shortWhistle.loadAsync(require("../../assets/sounds/whistle-short.mp3"));
+    }
+    catch (error) {
+      console.warn('sound error', { error });
+    }
   }
 
   componentWillUnmount() {
@@ -116,15 +125,31 @@ class Scoreboard extends React.PureComponent {
       });
     }
 
-    if (game.currentSet > this.props.game.currentSet) {
+    if (game.currentSet && this.props.game.currentSet && game.currentSet > this.props.game.currentSet) {
       this.showInterstitial();
     }
 
-    if (!canScore) {
-      const soundObject = new Audio.Sound();
+    if (this.props.game.currentSet && nextProps.game.currentSet) {
+      let prevAwayScore = this.props.game.sets[this.props.game.currentSet].awayTeamScore;
+      let currAwayScore = game.sets[game.currentSet].awayTeamScore;
+      if (prevAwayScore < currAwayScore) {
+        await this.playShortWhitle();
+      }
+
+      let prevHomeScore = this.props.game.sets[this.props.game.currentSet].homeTeamScore;
+      let currHomeScore = game.sets[game.currentSet].homeTeamScore;
+      if (prevHomeScore < currHomeScore) {
+        await this.playShortWhitle();
+      }
+    }
+  }
+
+  playShortWhitle = async () => {
+    const { isLoaded } = await this.shortWhistle.getStatusAsync();
+    if (isLoaded) {
       try {
-        await soundObject.loadAsync(require("../../assets/sounds/whistle-short.mp3"));
-        await soundObject.playAsync();
+        await this.shortWhistle.setPositionAsync(0);
+        await this.shortWhistle.playAsync();
       } catch (error) {
         console.log(error);
       }
