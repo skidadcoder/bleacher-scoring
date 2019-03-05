@@ -116,12 +116,12 @@ class SavedGameListScreen extends React.Component {
               No games...yet!
             </Text>
 
-            <Text style={[human.body, { lineHeight: 24, marginBottom: 16, textAlign: "center" }]}>
-              When you watch a game, it and others like it will be listed here.
-            </Text>
-
             <Text style={[human.body, { lineHeight: 24, textAlign: "center" }]}>
               To get started, tap the <MaterialIcons name="location-searching" size={18} /> icon above to search for games by city.
+            </Text>
+
+            <Text style={[human.body, { lineHeight: 24, marginBottom: 16, textAlign: "center" }]}>
+              When you watch a game, it and others like it will be listed here.
             </Text>
           </View>
         );

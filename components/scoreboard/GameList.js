@@ -148,15 +148,15 @@ export default class GameList extends React.PureComponent {
   };
 
   renderFavoriteButton = (rowMap, item) => {
-    const { onGameFavoritePress, onGameUnfavoritePress } = this.props;
+    const { onGameUnfavoritePress } = this.props;
 
     const isSavedGame = this.isSavedGame(item);
 
-    if (onGameFavoritePress && onGameUnfavoritePress) {
+    if (onGameUnfavoritePress) {
       return (
         <TouchableOpacity
           style={[styles.backRightBtn]}
-          onPress={isSavedGame ? this.onUnfavoritePress(rowMap, item) : this.onFavoritePress(rowMap, item)}
+          onPress={this.onUnfavoritePress(rowMap, item)}
         >
           <Icon.MaterialCommunityIcons
             name={isSavedGame ? "heart-off" : "heart-outline"}
@@ -268,7 +268,7 @@ export default class GameList extends React.PureComponent {
 
     rightOpenValue -= onGameEditPress ? defaultWidth : 0;
     rightOpenValue -= onGameDeletePress ? defaultWidth : 0;
-    rightOpenValue -= onGameFavoritePress && onGameUnfavoritePress ? defaultWidth : 0;
+    rightOpenValue -= onGameUnfavoritePress ? defaultWidth : 0;
 
     return (
       <SwipeListView
