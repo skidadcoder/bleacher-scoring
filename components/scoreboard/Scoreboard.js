@@ -111,7 +111,7 @@ class Scoreboard extends React.PureComponent {
   async componentWillReceiveProps(nextProps) {
     const { gameFetchSucceeded, gamePostPersistSucceeded, gamePostsFetchSucceeded, game, canScore } = nextProps;
 
-    if (gameFetchSucceeded && !this.props.gameFetchSucceeded) {
+    if (gameFetchSucceeded) {
       const { userId, displayName } = game;
       const scorekeeper = { userId: userId, displayName: displayName };
       this.props.saveScorekeeper({ scorekeeper });
