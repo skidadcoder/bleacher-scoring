@@ -120,6 +120,8 @@ class ScorerGameListScreen extends React.PureComponent {
           {!userGamesFetchStart && userGames && userGames.length > 0 && (
             <GameList
               data={userGames}
+              disableRightSwipe={true}
+              disableLeftSwipe={false}
               onGamePress={this.onGamePress}
               onGameDeletePress={this.onGameDeletePress}
               onGameEditPress={this.onGameEditPress}

@@ -120,6 +120,8 @@ class SavedGameListScreen extends React.Component {
       return (
         <GameList
           data={games}
+          disableRightSwipe={true}
+          disableLeftSwipe={false}
           savedGames={this.props.savedGames}
           savedScorekeepers={this.props.savedScorekeepers}
           onGamePress={this.onGamePress}

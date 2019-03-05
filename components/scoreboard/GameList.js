@@ -261,7 +261,7 @@ export default class GameList extends React.PureComponent {
   };
 
   render() {
-    const { data, onGameEditPress, onGameDeletePress, onGameFavoritePress, onGameUnfavoritePress } = this.props;
+    const { data, disableLeftSwipe, disableRightSwipe, onGameEditPress, onGameDeletePress, onGameFavoritePress, onGameUnfavoritePress } = this.props;
 
     let rightOpenValue = -10;
     const defaultWidth = 60;
@@ -273,7 +273,8 @@ export default class GameList extends React.PureComponent {
     return (
       <SwipeListView
         useFlatList
-        disableRightSwipe
+        disableRightSwipe={ disableRightSwipe }        
+        disableLeftSwipe={ disableLeftSwipe }
         data={data}
         keyExtractor={item => item.gameUid}
         renderItem={(data, rowMap) => {

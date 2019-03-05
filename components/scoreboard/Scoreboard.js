@@ -47,9 +47,6 @@ import Colors from "../../constants/Colors";
 import GlobalStyles from "../../screens/styles";
 import storeUrl from "../../utils/storeUrl";
 import getEnvVars from "../../environment"
-// const HEADER_MAX_HEIGHT = 260;
-// const HEADER_MIN_HEIGHT = 0; //Platform.OS === "ios" ? 60 : 73;
-// const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
 const initialState = {
   currentUser: null,
@@ -112,7 +109,13 @@ class Scoreboard extends React.PureComponent {
   }
 
   async componentWillReceiveProps(nextProps) {
-    const { gamePostPersistSucceeded, gamePostsFetchSucceeded, game, canScore } = nextProps;
+    const { gameFetchSucceeded, gamePostPersistSucceeded, gamePostsFetchSucceeded, game, canScore } = nextProps;
+
+    if (gameFetchSucceeded && !this.props.gameFetchSucceeded) {
+      const { userId, displayName } = game;
+      const scorekeeper = { userId: userId, displayName: displayName };
+      this.props.saveScorekeeper({ scorekeeper });
+    }
 
     if (gamePostsFetchSucceeded) {
       this.setState({ loadingPosts: false });
@@ -691,8 +694,8 @@ class Scoreboard extends React.PureComponent {
       headerSettings = {
         //title: "asdf",//game.venueName,
         shareAction: () => this.onShareGamePress(),
-        unfavoriteAction: !canScore && this.props.isSavedGame ? () => this.onUnfavoriteGamePress(false) : undefined,
-        favoriteAction: !canScore && !this.props.isSavedGame ? () => this.onFavoriteGamePress() : undefined,
+        //unfavoriteAction: !canScore && this.props.isSavedGame ? () => this.onUnfavoriteGamePress(false) : undefined,
+        //favoriteAction: !canScore && !this.props.isSavedGame ? () => this.onFavoriteGamePress() : undefined,
         navigateBack,
         navigateTo: canScore ? "EditGame" : undefined,
         navigateToIcon: canScore ? "edit" : undefined,
@@ -737,7 +740,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { gameUid } = state.selectedGame;
-  const { data } = state.game;
+  const { data, gameFetchSucceeded } = state.game;
   const { posts } = state.gamePosts.data || {};
   const { gamePostsFetchSucceeded } = state.gamePosts;
   const { gamePostPersistSucceeded } = state.gamePost;
@@ -774,6 +777,7 @@ const mapStateToProps = state => {
   return {
     gameUid,
     game,
+    gameFetchSucceeded,
     orderedPosts,
     gamePostsFetchSucceeded,
     gamePostPersistSucceeded,

@@ -58,26 +58,6 @@ class GameSearchListScreen extends React.Component {
     this.props.navigation.navigate("Scoreboard");
   };
 
-  onGameFavoritePress = game => {
-    this.props.saveGame({ game });
-  };
-
-  onGameUnfavoritePress = game => {
-    const { gameUid } = game;
-    this.props.unSaveGame({ gameUid });
-  };
-
-  onScorekeeperFavoritePress = game => {
-    const { userId, displayName } = game;
-    const scorekeeper = { userId: userId, displayName: displayName };
-    this.props.saveScorekeeper({ scorekeeper });
-  }
-
-  onScorekeeperUnfavoritePress = game => {
-    const { userId } = game;
-    this.props.unSaveScorekeeper({ userId });
-  }
-
   renderGooglePlacesInput = () => {
     return (
       <GooglePlacesAutocomplete
@@ -153,13 +133,11 @@ class GameSearchListScreen extends React.Component {
       return (
         <GameList
           data={games}
+          disableRightSwipe={true}
+          disableLeftSwipe={true}
           savedGames={this.props.savedGames}
           savedScorekeepers={this.props.savedScorekeepers}
           onGamePress={this.onGamePress}
-          onGameFavoritePress={this.onGameFavoritePress}
-          onGameUnfavoritePress={this.onGameUnfavoritePress}
-          onScorekeeperFavoritePress={this.onScorekeeperFavoritePress}
-          onScorekeeperUnfavoritePress={this.onScorekeeperUnfavoritePress}
         />
       );
     }
@@ -235,41 +213,3 @@ export default connect(
   mapStateToProps,
   { fetchNearbyGames, saveScorekeeper, saveGame, selectGame, unSaveScorekeeper, unSaveGame }
 )(GameSearchListScreen);
-
-const styles = StyleSheet.create({
-  textInputContainer: {
-    flexDirection: "row",
-    borderColor: iOSColors.gray,
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignContent: "center",
-    margin: 10
-  },
-  textInput: {
-    flex: 1,
-    height: 40,
-    fontSize: 16,
-    marginLeft: 10
-  },
-  tabsContainerStyle: {},
-  tabStyle: {
-    borderColor: Colors.secondaryColor,
-    backgroundColor: "transparent"
-  },
-  tabTextStyle: {
-    color: Colors.secondaryColor
-  },
-  activeTabStyle: {
-    backgroundColor: Colors.secondaryColor
-  },
-  activeTabTextStyle: {
-    color: Colors.primaryColor
-  },
-  tabBadgeContainerStyle: {},
-  activeTabBadgeContainerStyle: {},
-  tabBadgeStyle: {},
-  activeTabBadgeStyle: {}
-});
