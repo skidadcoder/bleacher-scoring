@@ -1,10 +1,11 @@
 import _ from "lodash";
 import React from "react";
+import firebase from "firebase";
+import { ActivityIndicator, Alert, SafeAreaView, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AdMobBanner } from "expo";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { fetchUserGames, deleteGame, selectGame } from "../../actions/gameActions";
-import { ActivityIndicator, Alert, SafeAreaView, Text, View } from "react-native";
-import firebase from "firebase";
 import { human, iOSColors } from "react-native-typography";
 import HeaderBar from "../../components/HeaderBar";
 import GlobalStyles from "../styles";
@@ -96,9 +97,21 @@ class ScorerGameListScreen extends React.PureComponent {
 
   renderEmptyList = () => {
     return (
-      <View style={{ margin: 20, justifyContent: "center", alignContent: "center" }}>
-        <Text style={[human.body, { marginBottom: 10, textAlign: "center" }]}>
-          You have not created any games. Tap the "+" icon to create a game.
+      <View
+        style={{
+          flex: 1,
+          marginLeft: 20,
+          marginRight: 20,
+          justifyContent: "center",
+          alignContent: "center"
+        }}
+      >
+        <Text style={[human.title1, { marginBottom: 32, textAlign: "center" }]}>
+          No games...yet!
+        </Text>
+
+        <Text style={[human.body, { lineHeight: 24, marginBottom: 16, textAlign: "center" }]}>
+          To create a new game, tap the <MaterialIcons name="add" size={18} /> icon above.
         </Text>
       </View>
     );
