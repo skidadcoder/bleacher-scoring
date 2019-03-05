@@ -5,7 +5,7 @@ import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from "r
 import { connect } from "react-redux";
 import { AdMobBanner } from "expo";
 import { fetchFavoriteGames, fetchFavoriteScorekeeperGames, saveGame, saveScorekeeper, selectGame, unSaveScorekeeper, unSaveGame } from "../../actions/gameActions";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { human, iOSColors } from "react-native-typography";
 import HeaderBar from "../../components/HeaderBar";
 import GameList from "../../components/scoreboard/GameList";
@@ -100,56 +100,54 @@ class SavedGameListScreen extends React.Component {
       );
     }
 
-    if (!favoriteGamesFetchStarted && !favoriteScorekeeperGamesFetchStarted && games.length === 0) {
-      return (
-        <View
-          style={{
-            margin: 20,
-            justifyContent: "center",
-            alignContent: "center"
-          }}
-        >
-          <Text style={[human.body]}>
-            You have no favorites.
-          </Text>
-        </View>
-      );
-    }
+    if (!favoriteGamesFetchStarted && !favoriteScorekeeperGamesFetchStarted) {
+      if (games.length === 0) {
+        return (
+          <View
+            style={{
+              flex: 1,
+              marginLeft: 20,
+              marginRight: 20,
+              justifyContent: "center",
+              alignContent: "center"
+            }}
+          >
+            <Text style={[human.title1, { marginBottom: 32, textAlign: "center" }]}>
+              No games...yet!
+            </Text>
 
-    if (!favoriteGamesFetchStarted && !favoriteScorekeeperGamesFetchStarted && games.length > 0) {
-      return (
-        <GameList
-          data={games}
-          disableRightSwipe={true}
-          disableLeftSwipe={false}
-          savedGames={this.props.savedGames}
-          savedScorekeepers={this.props.savedScorekeepers}
-          onGamePress={this.onGamePress}
-          onGameFavoritePress={this.onGameFavoritePress}
-          onGameUnfavoritePress={this.onGameUnfavoritePress}
-          onScorekeeperFavoritePress={this.onScorekeeperFavoritePress}
-          onScorekeeperUnfavoritePress={this.onScorekeeperUnfavoritePress}
-        />
-      );
+            <Text style={[human.body, { lineHeight: 24, marginBottom: 16, textAlign: "center" }]}>
+              When you watch a game, it and others like it will be listed here.
+            </Text>
+
+            <Text style={[human.body, { lineHeight: 24, textAlign: "center" }]}>
+              To get started, tap the <MaterialIcons name="location-searching" size={18} /> icon above to search for games by city.
+            </Text>
+          </View>
+        );
+      } else {
+        return (
+          <GameList
+            data={games}
+            disableRightSwipe={true}
+            disableLeftSwipe={false}
+            savedGames={this.props.savedGames}
+            savedScorekeepers={this.props.savedScorekeepers}
+            onGamePress={this.onGamePress}
+            onGameUnfavoritePress={this.onGameUnfavoritePress}
+            onScorekeeperUnfavoritePress={this.onScorekeeperUnfavoritePress}
+          />
+        );
+      }
     }
   };
 
   render() {
     return (
       <SafeAreaView style={[GlobalStyles.screenRootView]}>
-        <HeaderBar title="Favorite Games" hideBack={true} />
+        <HeaderBar title="Games" hideBack={true} />
 
         <View style={{ flexDirection: "row" }}>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate("GameSearchList")}>
-              <MaterialIcons
-                name="location-on"
-                size={30}
-                color={iOSColors.gray}
-                style={{ alignSelf: "center", marginBottom: 10 }}
-              />
-            </TouchableOpacity>
-          </View>
           <View
             style={{
               flex: 1,
@@ -159,10 +157,20 @@ class SavedGameListScreen extends React.Component {
           >
             <MaterialIcons
               name="favorite-border"
-              size={30}
+              size={32}
               color={iOSColors.white}
-              style={{ alignSelf: "center", marginBottom: 10 }}
+              style={{ alignSelf: "center", marginBottom: 8 }}
             />
+          </View>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate("GameSearchList")}>
+              <MaterialIcons
+                name="location-searching"
+                size={32}
+                color={iOSColors.gray}
+                style={{ alignSelf: "center", marginBottom: 8 }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 

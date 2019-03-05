@@ -98,7 +98,7 @@ class ScorerGameListScreen extends React.PureComponent {
     return (
       <View style={{ margin: 20, justifyContent: "center", alignContent: "center" }}>
         <Text style={[human.body, { marginBottom: 10, textAlign: "center" }]}>
-          You have not created any games. Click the "+" icon to create a game.
+          You have not created any games. Tap the "+" icon to create a game.
         </Text>
       </View>
     );

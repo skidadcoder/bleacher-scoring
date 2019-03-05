@@ -150,6 +150,16 @@ class GameSearchListScreen extends React.Component {
 
         {/* Tabs */}
         <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate("SavedGameList")}>
+              <MaterialIcons
+                name="favorite-border"
+                size={32}
+                color={iOSColors.gray}
+                style={{ alignSelf: "center", marginBottom: 8 }}
+              />
+            </TouchableOpacity>
+          </View>
           <View
             style={{
               flex: 1,
@@ -158,21 +168,11 @@ class GameSearchListScreen extends React.Component {
             }}
           >
             <MaterialIcons
-              name="location-on"
-              size={30}
+              name="location-searching"
+              size={32}
               color={iOSColors.white}
-              style={{ alignSelf: "center", marginBottom: 10 }}
+              style={{ alignSelf: "center", marginBottom: 8 }}
             />
-          </View>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate("SavedGameList")}>
-              <MaterialIcons
-                name="favorite-border"
-                size={30}
-                color={iOSColors.gray}
-                style={{ alignSelf: "center", marginBottom: 10 }}
-              />
-            </TouchableOpacity>
           </View>
         </View>
 

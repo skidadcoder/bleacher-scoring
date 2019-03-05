@@ -76,7 +76,7 @@ class HomeScreen extends React.Component {
               <MenuItem
                 icon="counter"
                 text="WATCH A GAME"
-                onPress={() => this.props.navigation.navigate("GameSearchList")}
+                onPress={() => this.props.navigation.navigate("SavedGameList")}
               />
               <MenuItem
                 icon="clipboard-flow"

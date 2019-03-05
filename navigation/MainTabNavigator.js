@@ -37,8 +37,8 @@ HomeStack.navigationOptions = {
 //Find Games Stack
 const SpectatorStack = createStackNavigator(
   {
-    GameSearchList: GameSearchListScreen,
     SavedGameList: SavedGameListScreen,
+    GameSearchList: GameSearchListScreen,
     Scoreboard: ScoreboardScreen,
     ImageGallery: ImageGalleryScreen
   },
