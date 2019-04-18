@@ -245,7 +245,7 @@ export default class GameList extends React.PureComponent {
               </View>
               <View style={{ marginTop: 4 }}>
                 <Text numberOfLines={1} style={[human.footnote, { color: iOSColors.gray, marginLeft: 2 }]}>
-                  {timeHelpers.timeAgo(game.lastUpdate)}
+                  {game.lastUpdate && timeHelpers.timeAgo(game.lastUpdate)}
                 </Text>
               </View>
               <View style={{ marginTop: 4 }}>
