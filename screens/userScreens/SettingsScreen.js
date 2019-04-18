@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { Constants } from "expo";
 import { connect } from "react-redux";
 import firebase from "firebase";
 import { logOutUser } from "../../actions/authActions";
@@ -18,6 +19,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Ionicons } from "@expo/vector-icons";
 import { human, iOSColors } from "react-native-typography";
 import Colors from "../../constants/Colors";
+import Versions from "../../constants/Versions";
 import HeaderBar from "../../components/HeaderBar";
 import GlobalStyles from "../styles";
 
@@ -246,6 +248,9 @@ class SettingsScreen extends React.Component {
                   <View style={styles.navContainer}>
                     {
                       this.state.checkingForUpdates && <ActivityIndicator size="large" style={{ alignSelf: "flex-end" }} />
+                    }
+                    {
+                      !this.state.checkingForUpdates && <Text style={[human.body, { alignSelf: "flex-end" }]}>{"v" + Constants.manifest.version + "." + Versions.jsBuildNumber}</Text>
                     }
                   </View>
                 </View>
