@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  ActivityIndicator,
+  Alert,
   AsyncStorage,
   Image,
   SafeAreaView,
@@ -21,7 +23,8 @@ import GlobalStyles from "../styles";
 
 const initialState = {
   displayName: null,
-  photoURL: null
+  photoURL: null,
+  checkingForUpdates: false
 };
 
 class SettingsScreen extends React.Component {
@@ -51,11 +54,11 @@ class SettingsScreen extends React.Component {
   }
 
   componentWillFocus = () => {
-    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);    
+    Expo.ScreenOrientation.allowAsync(Expo.ScreenOrientation.Orientation.PORTRAIT);
   };
 
   componentWillUnmount() {
-    this.navListeners.forEach(navListener => navListener.remove());   
+    this.navListeners.forEach(navListener => navListener.remove());
     this.mounted = false;
   }
 
@@ -65,6 +68,31 @@ class SettingsScreen extends React.Component {
 
   componentWillUnmount() {
     this.mounted = false;
+  }
+
+  onCheckForUpdates = async () => {
+    if (__DEV__) {
+      return;
+    }
+
+    this.setState(state => {
+      return { checkingForUpdates: true };
+    });
+
+    try {
+      const update = await Expo.Updates.checkForUpdateAsync();
+      if (update.isAvailable) {
+        await Expo.Updates.fetchUpdateAsync();
+        // ... notify user of update ...
+        Expo.Updates.reloadFromCache();
+      }
+    } catch (e) {
+      Alert.alert("Oops. We are unable to check for updates at this time. Please restart the application and try again.");
+    } finally {
+      this.setState(state => {
+        return { checkingForUpdates: false };
+      });
+    }
   }
 
   onLogOutPressed = () => {
@@ -208,6 +236,17 @@ class SettingsScreen extends React.Component {
                       color={iOSColors.gray}
                       style={{ alignSelf: "flex-end" }}
                     />
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={this.onCheckForUpdates}>
+                <View style={styles.settingsSectionContent}>
+                  <Text style={[human.body, styles.label]}>Check For Updates</Text>
+                  <View style={styles.navContainer}>
+                    {
+                      this.state.checkingForUpdates && <ActivityIndicator size="large" style={{ alignSelf: "flex-end" }} />
+                    }
                   </View>
                 </View>
               </TouchableOpacity>
