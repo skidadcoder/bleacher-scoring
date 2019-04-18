@@ -177,7 +177,7 @@ export const updateGameLocation = ({ gameUid, location }) => {
 export const createGamePost = ({ gameUid, body, image }) => {
   const postUid = firebase
     .database()
-    .ref(`/games/${gameUid}/posts`)
+    .ref(`/gamePosts/${gameUid}/posts`)
     .push().key;
 
   return _persistGamePost({ gameUid, postUid, body, imageUri: null, image });
