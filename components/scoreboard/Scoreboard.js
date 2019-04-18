@@ -110,39 +110,41 @@ class Scoreboard extends React.PureComponent {
 
   async componentWillReceiveProps(nextProps) {
     const { gameFetchSucceeded, gamePostPersistSucceeded, gamePostsFetchSucceeded, game, canScore } = nextProps;
+    if (game) {
 
-    if (gameFetchSucceeded) {
-      const { userId, displayName } = game;
-      const scorekeeper = { userId: userId, displayName: displayName };
-      this.props.saveScorekeeper({ scorekeeper });
-    }
-
-    if (gamePostsFetchSucceeded) {
-      this.setState({ loadingPosts: false });
-    }
-
-    if (gamePostPersistSucceeded) {
-      this.refs._scrollView.getNode().scrollTo({
-        y: 0,
-        animated: true
-      });
-    }
-
-    if (game.currentSet && this.props.game.currentSet && game.currentSet > this.props.game.currentSet) {
-      this.showInterstitial();
-    }
-
-    if (this.props.game.currentSet && nextProps.game.currentSet) {
-      let prevAwayScore = this.props.game.sets[this.props.game.currentSet].awayTeamScore;
-      let currAwayScore = game.sets[game.currentSet].awayTeamScore;
-      if (prevAwayScore < currAwayScore) {
-        await this.playShortWhitle();
+      if (gameFetchSucceeded) {
+        const { userId, displayName } = game;
+        const scorekeeper = { userId: userId, displayName: displayName };
+        this.props.saveScorekeeper({ scorekeeper });
       }
 
-      let prevHomeScore = this.props.game.sets[this.props.game.currentSet].homeTeamScore;
-      let currHomeScore = game.sets[game.currentSet].homeTeamScore;
-      if (prevHomeScore < currHomeScore) {
-        await this.playShortWhitle();
+      if (gamePostsFetchSucceeded) {
+        this.setState({ loadingPosts: false });
+      }
+
+      if (gamePostPersistSucceeded) {
+        this.refs._scrollView.getNode().scrollTo({
+          y: 0,
+          animated: true
+        });
+      }
+
+      if (game.currentSet && this.props.game.currentSet && game.currentSet > this.props.game.currentSet) {
+        this.showInterstitial();
+      }
+
+      if (this.props.game.currentSet && nextProps.game.currentSet) {
+        let prevAwayScore = this.props.game.sets[this.props.game.currentSet].awayTeamScore;
+        let currAwayScore = game.sets[game.currentSet].awayTeamScore;
+        if (prevAwayScore < currAwayScore) {
+          await this.playShortWhitle();
+        }
+
+        let prevHomeScore = this.props.game.sets[this.props.game.currentSet].homeTeamScore;
+        let currHomeScore = game.sets[game.currentSet].homeTeamScore;
+        if (prevHomeScore < currHomeScore) {
+          await this.playShortWhitle();
+        }
       }
     }
   }
@@ -755,24 +757,26 @@ const mapStateToProps = state => {
     }
   ).reverse();
 
+  //COMMMENTED THIS OUT FOR NOW BEWCUAE IT ISN"T NEEDED SINCE ALL WATCHED
+  //GAMES GET SET AS FAVORITE
   //check if this is a saved game
-  let isSavedGame = false;
-  const { savedGames, savedScorekeepers } = state;
-  const foundGame = _.find(savedGames, function (o) {
-    return o.gameUid === gameUid;
-  });
+  let isSavedGame = true;
+  // const { savedGames, savedScorekeepers } = state;
+  // const foundGame = _.find(savedGames, function (o) {
+  //   return o.gameUid === gameUid;
+  // });
 
-  if (foundGame) {
-    isSavedGame = true;
-  }
+  // if (foundGame) {
+  //   isSavedGame = true;
+  // }
 
-  const foundScorekeeper = _.find(savedScorekeepers, function (o) {
-    return o.userId === game.userId;
-  })
+  // const foundScorekeeper = _.find(savedScorekeepers, function (o) {
+  //   return o.userId === game.userId;
+  // })
 
-  if (foundScorekeeper) {
-    isSavedGame = true;
-  }
+  // if (foundScorekeeper) {
+  //   isSavedGame = true;
+  // }
 
   return {
     gameUid,
